@@ -1,0 +1,289 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}Spin the Wheel{% endblock title %}
+{% block style %}
+<style>
+    #chart {
+        width: 100%;
+        max-width: 500px;
+        height: auto;
+        margin: auto;
+        display: block;
+    }
+
+    #question {
+        margin-top: 30px;
+        text-align: center;
+    }
+
+    #question h1 {
+        font-size: 30px;
+        font-weight: bold;
+        margin: 0;
+    }
+
+    .btn-custom {
+        font-size: 16px;
+        padding: 10px 20px;
+    }
+
+    .spin-button {
+        font-weight: bold;
+        font-size: 30px;
+        fill: #fff;
+        cursor: pointer;
+        user-select: none;
+        transition: fill 0.2s;
+    }
+
+    .spin-button:hover {
+        fill: #201b1b;
+    }
+
+    @media (max-width: 576px) {
+        #question h1 {
+            font-size: 24px;
+        }
+    }
+</style>
+{% endblock style %}
+{% block content %}
+<div id="validation" class="text-center my-4">
+    <input type="text" id="code" class="form-control mb-2" placeholder="Сугалааны дугаараа оруулна уу." />
+    <button class="btn btn-primary btn-custom" onclick="validateCode()">Оруулах</button>
+</div>
+
+<div id="register-form" class="text-center my-4" style="display: none;">
+    <input type="text" id="register_no" class="form-control mb-2" placeholder="Регистрийн дугаараа оруулна уу" />
+    <button class="btn btn-primary btn-custom" onclick="validateRegisterNo()">Оруулах</button>
+</div>
+
+<div id="chart" style="display: none;"></div>
+<div id="question" style="display: none;">
+    <h1></h1>
+    <img id="resultImage" src alt="">
+    <button id="replayButton" style="display: none;" class="btn btn-primary" onclick="window.location.reload()">Дахин эхлүүлэх</button>
+</div>
+<div id="csrf-token" style="display: none;">{{ csrf_token }}</div>
+<div class="toast" role="alert" aria-live="assertive" aria-atomic="true"></div>
+{% endblock content %}
+{% block scripts %}
+<script>
+    function getCsrfToken() {
+        var name = 'csrftoken';
+        var cookieValue = null;
+        if (document.cookie && document.cookie !== '') {
+            var cookies = document.cookie.split(';');
+            for (var i = 0; i < cookies.length; i++) {
+                var cookie = cookies[i].trim();
+                if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                    cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                    break;
+                }
+            }
+        }
+        return cookieValue;
+    }
+
+    var wheelData = [];
+
+    function showToast(message, success = true) {
+        var toastElement = document.createElement('div');
+        toastElement.className = `toast align-items-center text-white ${success ? 'bg-success' : 'bg-danger'}`;
+        toastElement.innerHTML = `<div class="d-flex"><div class="toast-body">${message}</div><button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button></div>`;
+        document.body.appendChild(toastElement);
+        var toast = new bootstrap.Toast(toastElement);
+        toast.show();
+        setTimeout(() => toastElement.remove(), 5000);
+    }
+
+    function validateCode() {
+        var code = document.getElementById("code").value;
+        fetch("{% url 'validate_code' %}", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/x-www-form-urlencoded",
+                "X-CSRFToken": getCsrfToken()
+            },
+            body: "code=" + code,
+        })
+            .then(response => response.json())
+            .then(data => {
+                if (data.valid) {
+                    document.getElementById("validation").style.display = "none";
+                    document.getElementById("register-form").style.display = "block";
+                } else {
+                    showToast("Буруу эсвэл ашиглагдсан код байна.", false);
+                }
+            });
+    }
+
+    function validateRegisterNo() {
+        var registerNo = document.getElementById("register_no").value;
+        fetch("{% url 'validate_register_no' %}", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/x-www-form-urlencoded",
+                "X-CSRFToken": getCsrfToken()
+            },
+            body: "register_no=" + registerNo,
+        })
+            .then(response => response.json())
+            .then(data => {
+                if (data.valid) {
+                    document.getElementById("register-form").style.display = "none";
+                    loadWheel();
+                } else {
+                    showToast("Регистрийн дугаар буруу байна", false);
+                }
+            });
+    }
+
+    function loadWheel() {
+        fetch("{% url 'get_wheel_items' %}")
+            .then(response => response.json())
+            .then(data => {
+                wheelData = data;
+                document.getElementById("chart").style.display = "block";
+                document.getElementById("question").style.display = "block";
+                renderWheel();
+            });
+    }
+
+    function renderWheel() {
+        var padding = { top: 20, right: 40, bottom: 0, left: 0 },
+            w = 500 - padding.left - padding.right,
+            h = 500 - padding.top - padding.bottom,
+            r = Math.min(w, h) / 2,
+            rotation = 0,
+            oldrotation = 0,
+            picked = 100000,
+            color = d3.scale.category20();
+
+        var svg = d3.select('#chart')
+            .append("svg")
+            .data([wheelData])
+            .attr("width", w + padding.left + padding.right)
+            .attr("height", h + padding.top + padding.bottom);
+
+        var container = svg.append("g")
+            .attr("class", "chartholder")
+            .attr("transform", "translate(" + (w / 2 + padding.left) + "," + (h / 2 + padding.top) + ")");
+
+        var vis = container.append("g");
+
+        var pie = d3.layout.pie().sort(null).value(function (d) { return 1; });
+        var arc = d3.svg.arc().outerRadius(r);
+
+        var arcs = vis.selectAll("g.slice")
+            .data(pie)
+            .enter()
+            .append("g")
+            .attr("class", "slice");
+
+        arcs.append("path")
+            .attr("fill", function (d, i) { return color(i); })
+            .attr("d", function (d) { return arc(d); });
+
+        arcs.append("image")
+            .attr("xlink:href", function (d, i) { return wheelData[i].image; })
+            .attr("width", 60)
+            .attr("height", 60)
+            .attr("transform", function (d) {
+                d.innerRadius = 0;
+                d.outerRadius = r;
+                d.angle = (d.startAngle + d.endAngle) / 2;
+                return "translate(" + arc.centroid(d) + ")rotate(" + (d.angle * 180 / Math.PI - 90) + ")translate(-25,-25)";
+            });
+
+        arcs.append("text").attr("transform", function (d) {
+            d.innerRadius = 0;
+            d.outerRadius = r;
+            d.angle = (d.startAngle + d.endAngle) / 2;
+            return "rotate(" + (d.angle * 180 / Math.PI - 90) + ")translate(" + (d.outerRadius - 10) + ")";
+        })
+            .attr("text-anchor", "end")
+            .text(function (d, i) { return wheelData[i].label; });
+
+        container.on("click", spin);
+
+        function spin(d) {
+            const replayButton = document.querySelector("#replayButton")
+            const resultImage = document.querySelector("#resultImage")
+            container.on("click", null);
+
+            var ps = 360 / wheelData.length,
+                pieslice = Math.round(1440 / wheelData.length),
+                rng = Math.floor((Math.random() * 1440) + 360);
+
+            rotation = (Math.round(rng / ps) * ps);
+            picked = Math.round(wheelData.length - (rotation % 360) / ps);
+            picked = picked >= wheelData.length ? (picked % wheelData.length) : picked;
+
+            rotation += 90 - Math.round(ps / 2);
+            vis.transition()
+                .duration(3000)
+                .attrTween("transform", rotTween)
+                .each("end", function () {
+                    d3.select("#question h1")
+                        .text("Та дараах хонжворыг хожлоо ---> " + wheelData[picked].label);
+                    oldrotation = rotation;
+                    replayButton.style.display = "block";
+                    resultImage.style.width="150px";
+                    resultImage.style.height="150px";
+                    resultImage.src = wheelData[picked].image
+                    
+                    saveResult(wheelData[picked].value);
+                });
+            
+        }
+
+        function rotTween(to) {
+            var i = d3.interpolate(oldrotation % 360, rotation);
+            return function (t) {
+                return "rotate(" + i(t) + ")";
+            };
+        }
+
+        function saveResult(item_id) {
+            var registerNo = document.getElementById("register_no").value;
+            var code = document.getElementById("code").value;
+            fetch("{% url 'save_result' %}", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/x-www-form-urlencoded",
+                    "X-CSRFToken": getCsrfToken()
+                },
+                body: "register_no=" + registerNo + "&item_id=" + item_id + "&code=" + code,
+            })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        showToast("Та " + data.title + " хожлоо танд баяр хүргэе");
+                    } else {
+                        showToast("Системийн алдаа гарлаа.", false);
+                    }
+                });
+        }
+
+        svg.append("g")
+            .attr("transform", "translate(" + (w + padding.left + padding.right) + "," + ((h / 2) + padding.top) + ")")
+            .append("path")
+            .attr("d", "M-" + (r * .15) + ",0L0," + (r * .05) + "L0,-" + (r * .05) + "Z")
+            .style({ "fill": "black" });
+
+        container.append("circle")
+            .attr("cx", 0)
+            .attr("cy", 0)
+            .attr("r", 90)
+            .style({ "fill": "gray", "cursor": "pointer" });
+
+        container.append("text")
+            .attr("x", 0)
+            .attr("y", 15)
+            .attr("text-anchor", "middle")
+            .text("Эргүүлэх")
+            .attr("class", "spin-button");
+    }
+</script>
+{% endblock scripts %}

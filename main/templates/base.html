@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+{% load static %}
+<html dir="ltr" lang="en-US">
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+    <link rel="shortcut icon" href="{% static 'images/favicon.ico' %}">
+    <link href="https://fonts.googleapis.com/css2?family=LXGW+WenKai+Mono+TC&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{% static 'css/bootstrap.css' %}" type="text/css" />
+    <link rel="stylesheet" href="{% static 'style.css' %}" type="text/css" />
+    <link rel="stylesheet" href="{% static 'css/font-icons.css' %}" type="text/css" />
+    <link rel="stylesheet" href="{% static 'css/animate.css' %}" type="text/css" />
+    <link rel="stylesheet" href="{% static 'custom.css' %}" type="text/css" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{% block title %}Маргааш{% endblock title %} | БСБ</title>
+    {% block style %}
+    <style>
+        body {
+            font-family: 'LXGW WenKai Mono TC', sans-serif;
+            background-color: #f8f9fa;
+        }
+
+        .toast-container {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      z-index: 1050;
+      }
+
+      .toast {
+          background-color: rgba(58, 193, 98, 0.85); /* Green background for success messages */
+          color: white;
+          padding: 10px 20px;
+          border-radius: 5px;
+          box-shadow: 0 0 10px rgba(0,0,0,0.1);
+      }
+
+      .toast-error {
+          background-color: rgba(220, 53, 69, 0.85); /* Red background for error messages */
+      }
+        </style>
+    {% endblock style %}
+</head>
+
+<body>
+
+    {% block header %}
+    <header class="text-center my-4">
+        <h1>WELCOME SONDOR BACK TO SCHOOL </h1>
+    </header>
+    {% endblock header %}
+
+    <div id="wrapper" class="container">
+        {% block content %}
+        {% endblock content %}
+    </div>
+
+    <div id="gotoTop" class="icon-angle-up"></div>
+
+    <script src="{% static 'js/jquery.js' %}"></script>
+    <script src="{% static 'js/bootstrap.js' %}"></script>
+    <script src="{% static 'js/functions.js' %}"></script>
+    <script src="{% static 'js/plugins.easing.js' %}"></script>
+    <script src="{% static 'js/toastr.js' %}"></script>
+    <script src="https://d3js.org/d3.v3.min.js" charset="utf-8"></script>
+    {% block scripts %}
+    {% endblock scripts %}
+</body>
+</html>

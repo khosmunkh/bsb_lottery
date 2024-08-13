@@ -1,0 +1,87 @@
+/* ----------------------------------------------------------------
+	Custom CSS
+
+	Add all your Custom Styled CSS here for New Styles or
+	Overwriting Default Theme Styles for Better Handling Updates
+-----------------------------------------------------------------*/
+
+.portfolio-ajax-modal,.shop-quick-view-ajax{width:auto!important;max-width:1000px!important}.scw-switcher-wrap,.scw-trigger-icon{position:fixed;left:auto;background-color:#fff}.scw-trigger-icon{width:44px;height:44px;top:121px;right:26px;border:0;padding:0;text-align:center;z-index:5;cursor:pointer}.scw-trigger-icon i{font-size:18px}.scw-switcher-wrap.scw-switcher-open i:nth-of-type(1),.scw-switcher-wrap:not(.scw-switcher-open) i:nth-of-type(2){display:none}.scw-switcher-wrap{top:120px;right:25px;padding:23px;width:0;height:0;border:1px solid rgba(0,0,0,.09);border-radius:3px;box-shadow:0 13px 42px 11px rgba(0,0,0,.05);z-index:9999;overflow:hidden;-webkit-transition:all .45s ease;-o-transition:all .45s ease;transition:all .45s ease}.scw-switcher-wrap.scw-switcher-open{width:300px;height:70%;padding:35px 25px;overflow-y:scroll}.scw-switcher-wrap .widget{margin:0}.scw-switcher-wrap .line,.scw-switcher-wrap .widget{opacity:0;-webkit-transition:opacity 0s ease;-o-transition:opacity 0s ease;transition:opacity 0s ease}.scw-switcher-wrap.scw-switcher-open .line,.scw-switcher-wrap.scw-switcher-open .widget{opacity:1;-webkit-transition:opacity .3s .4s ease;-o-transition:opacity .3s .4s ease;transition:opacity .3s .4s ease}.scw-switcher-wrap .widget h4{font-size:14px;letter-spacing:1px;margin-bottom:15px}.scw-switcher-wrap .btn-container{margin:0 -5px -5px 0}.scw-switcher-wrap .btn{margin:0 5px 5px 0}.scw-switcher-wrap .row{margin:0 -5px}.scw-switcher-wrap .col-6{padding:5px}
+
+.top-cart-remove{
+	position:relative; left:10px; padding:0px 3px; margin-top:-8px;background-color: gray; border: none;color: white;text-align: center;text-decoration: none; border-radius: 50%; font-size: 12px;
+}
+
+
+.top-cart-remove:hover{
+	background-color: rgb(82, 82, 82);
+	color: white;
+
+}
+
+#snackbar {
+	visibility: hidden;
+	min-width: 250px;
+	margin-left: -125px;
+	background-color: #5cb85c;
+	color: #fff;
+	text-align: center;
+	border-radius: 2px;
+	padding: 16px;
+	position: fixed;
+	z-index: 15;
+	left: 50%;
+	bottom: 30px;
+}
+
+#snackbar.show {
+	visibility: visible;
+	-webkit-animation: fadein 0.5s, fadeout 0.5s 2.5s;
+	animation: fadein 0.5s, fadeout 0.5s 2.5s;
+}
+
+@-webkit-keyframes fadein {
+	from {
+		bottom: 0;
+		opacity: 0;
+	}
+	to {
+		bottom: 30px;
+		opacity: 1;
+	}
+}
+
+@keyframes fadein {
+	from {
+		bottom: 0;
+		opacity: 0;
+	}
+	to {
+		bottom: 30px;
+		opacity: 1;
+	}
+}
+
+@-webkit-keyframes fadeout {
+	from {
+		bottom: 30px;
+		opacity: 1;
+	}
+	to {
+		bottom: 0;
+		opacity: 0;
+	}
+}
+
+@keyframes fadeout {
+	from {
+		bottom: 30px;
+		opacity: 1;
+	}
+	to {
+		bottom: 0;
+		opacity: 0;
+	}
+}
+
+
+.scw-switcher-wrap,.scw-trigger-icon{position:fixed;left:auto;background-color:#fff}.scw-trigger-icon{width:44px;height:44px;top:121px;right:26px;border:0;padding:0;text-align:center;z-index:5;cursor:pointer}.scw-trigger-icon i{font-size:18px}.scw-switcher-wrap.scw-switcher-open i:nth-of-type(1),.scw-switcher-wrap:not(.scw-switcher-open) i:nth-of-type(2){display:none}.scw-switcher-wrap{top:120px;right:25px;padding:23px;width:0;height:0;border:1px solid rgba(0,0,0,.09);border-radius:3px;box-shadow:0 13px 42px 11px rgba(0,0,0,.05);z-index:9999;overflow:hidden;-webkit-transition:all .45s ease;-o-transition:all .45s ease;transition:all .45s ease}.scw-switcher-wrap.scw-switcher-open{width:300px;height:70%;padding:35px 25px;overflow-y:scroll}.scw-switcher-wrap .widget{margin:0}.scw-switcher-wrap .line,.scw-switcher-wrap .widget{opacity:0;-webkit-transition:opacity 0s ease;-o-transition:opacity 0s ease;transition:opacity 0s ease}.scw-switcher-wrap.scw-switcher-open .line,.scw-switcher-wrap.scw-switcher-open .widget{opacity:1;-webkit-transition:opacity .3s .4s ease;-o-transition:opacity .3s .4s ease;transition:opacity .3s .4s ease}.scw-switcher-wrap .widget h4{font-size:14px;letter-spacing:1px;margin-bottom:15px}.scw-switcher-wrap .btn-container{margin:0 -5px -5px 0}.scw-switcher-wrap .btn{margin:0 5px 5px 0}.scw-switcher-wrap .row{margin:0 -5px}.scw-switcher-wrap .col-6{padding:5px}
