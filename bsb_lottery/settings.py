@@ -26,7 +26,13 @@ SECRET_KEY = 'django-insecure-e63z^r)vxj88$9c20r$7&^_u=0-q-rizg#z5el*$vv+--%n+=w
 DEBUG = True
 
 ALLOWED_HOSTS = ['*']
-CSRF_TRUSTED_ORIGINS = ['http://192.168.40.83']
+CORS_ALLOWED_ORIGINS = [
+    "http://192.168.70.212",
+    "http://192.168.70.212:8002",
+    "http://localhost:8002",
+]
+
+CSRF_TRUSTED_ORIGINS = ['http://192.168.70.212:8080']
 
 
 # Application definition
@@ -125,6 +131,7 @@ STATIC_URL = '/static/'
 STATICFILES_DIRS = [
     BASE_DIR / "static",
 ]
+STATIC_ROOT = '/static/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'main.wheel')
 MEDIA_URL = '/media/'
 

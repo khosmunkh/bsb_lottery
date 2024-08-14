@@ -1,3 +1,4 @@
 main.wheel/wheel/
 db.sqlite3
 .env
+/static/

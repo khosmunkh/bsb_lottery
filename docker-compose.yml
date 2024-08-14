@@ -3,12 +3,12 @@ services:
     image: postgres
     restart: always
     environment:
-      - PGPORT=6012
+      - PGPORT=6013
       - POSTGRES_DB=postgres
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=bsb@mn
     ports:
-      - "6012:5432"
+      - "6013:5432"
   web:
     volumes:
       - static:/static
@@ -17,15 +17,15 @@ services:
     build:
       context: .
     ports:
-      - "8001:8001"
+      - "8002:8002"
   nginx:
-    build: ./nginx
-    volumes:
-      - static:/static
-    ports:
-      - "80:80"
-    depends_on:
-      - web
-      
+      build: ./nginx
+      volumes:
+        - static:/static  # Mount the static volume
+      ports:
+        - "8080:80"  # Use port 8080 for this project's NGINX
+      depends_on:
+        - web
+
 volumes:
   static:

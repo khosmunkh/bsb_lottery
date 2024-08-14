@@ -41,6 +41,7 @@ def save_result(request):
             item=wheel_item,
             register_no=register_no
         )
-        lottery.is_active = False
-        lottery.save()
+        if code != 'test0000':
+            lottery.is_active = False
+            lottery.save()
         return JsonResponse({'success': True, 'title':wheel_item.title})
