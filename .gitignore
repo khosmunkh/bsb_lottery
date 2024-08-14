@@ -1,4 +1,5 @@
 main.wheel/wheel/
+*.pyc
 db.sqlite3
 .env
 /static/

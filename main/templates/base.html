@@ -13,44 +13,42 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>{% block title %}Маргааш{% endblock title %} | БСБ</title>
     {% block style %}
+    {% endblock style %}
     <style>
-        body {
-            font-family: 'LXGW WenKai Mono TC', sans-serif;
-            background-color: #f8f9fa;
-            background-image: url('{% static 'images/b2s-b-background.png' %}');
-        }
-
-        .toast-container {
+    .toast-container {
       position: fixed;
       top: 20px;
       right: 20px;
       z-index: 1050;
       }
+    .toast {
+        background-color: rgba(58, 193, 98, 0.85); /* Green background for success messages */
+        color: white;
+        padding: 10px 20px;
+        border-radius: 5px;
+        box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    }
 
-      .toast {
-          background-color: rgba(58, 193, 98, 0.85); /* Green background for success messages */
-          color: white;
-          padding: 10px 20px;
-          border-radius: 5px;
-          box-shadow: 0 0 10px rgba(0,0,0,0.1);
-      }
-
-      .toast-error {
-          background-color: rgba(220, 53, 69, 0.85); /* Red background for error messages */
-      }
-        </style>
-    {% endblock style %}
+    .toast-error {
+        background-color: rgba(220, 53, 69, 0.85); /* Red background for error messages */
+    }
+    body{
+        background-image: url("{% static 'images/background.png' %}");
+        background-repeat: no-repeat;
+        background-size: cover;
+        height: auto;
+    }
+    </style>
 </head>
 
-<body>
-
+    <body>
     {% block header %}
     <header class="text-center my-4">
-        <h1>WELCOME SONDOR BACK TO SCHOOL </h1>
+        <h3 class="">WELCOME SONDOR BACK TO SCHOOL </h3>
     </header>
     {% endblock header %}
 
-    <div id="wrapper" class="container">
+    <div id="" class="">
         {% block content %}
         {% endblock content %}
     </div>
