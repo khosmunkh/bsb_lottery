@@ -3,15 +3,19 @@ from django.db import models
 # Create your models here.
 
 
+from django.db import models
+
 class Wheel(models.Model):
     image = models.ImageField(upload_to='wheel/')
     title = models.CharField(max_length=100)
+    chance = models.FloatField(default=1.0, help_text="Chance of taarah magadlal")
     is_active = models.BooleanField(default=True)
+    quantity = models.IntegerField(default=0)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
     def __str__(self):
-        return self.title
+        return self.title + " ===> " + str(self.quantity) + " ш"
 
     class Meta:
         verbose_name = 'Хүрд'

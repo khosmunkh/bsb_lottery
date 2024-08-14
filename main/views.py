@@ -22,12 +22,16 @@ def validate_register_no(request):
         return JsonResponse({'valid': True})
 
 def get_wheel_items(request):
-    wheel_items = Wheel.objects.filter(is_active=True)
+    wheel_items = Wheel.objects.filter(is_active=True, quantity__gt=0)
     data = [
-        {'label': item.title, 'value': item.pk, 'image': item.image.url}
+        {'label': item.title, 'value': item.pk, 'image': item.image.url, 'chance': item.chance}
         for item in wheel_items
     ]
-    return JsonResponse(data, safe=False)
+    response = {
+        'has_items': bool(wheel_items),
+        'items': data
+    }
+    return JsonResponse(response, safe=False)
 
 def save_result(request):
     if request.method == 'POST':
@@ -45,4 +49,6 @@ def save_result(request):
         if code != 'test0000':
             lottery.is_active = False
             lottery.save()
+            wheel_item.quantity -= 1
+            wheel_item.save()
         return JsonResponse({'success': True, 'title':wheel_item.title})

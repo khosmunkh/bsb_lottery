@@ -151,15 +151,20 @@
     }
 
     function loadWheel() {
-        fetch("{% url 'get_wheel_items' %}")
-            .then(response => response.json())
-            .then(data => {
-                wheelData = data;
+    fetch("{% url 'get_wheel_items' %}")
+        .then(response => response.json())
+        .then(data => {
+            if (data.has_items) {
+                wheelData = data.items;
                 document.getElementById("chart").style.display = "block";
                 document.getElementById("question").style.display = "block";
                 renderWheel();
-            });
-    }
+            } else {
+                document.getElementById("question").style.display = "block";
+                document.querySelector("#question h1").innerText = "Бонус бэлэг бараа дууссан байна.";
+            }
+        });
+}
 
     function renderWheel() {
         var padding = { top: 20, right: 40, bottom: 0, left: 0 },
@@ -198,7 +203,7 @@
 
         arcs.append("image")
             .attr("xlink:href", function (d, i) { return wheelData[i].image; })
-            .attr("width", 60)
+            .attr("width", 80)
             .attr("height", 60)
             .attr("transform", function (d) {
                 d.innerRadius = 0;
@@ -207,14 +212,14 @@
                 return "translate(" + arc.centroid(d) + ")rotate(" + (d.angle * 180 / Math.PI - 90) + ")translate(-25,-25)";
             });
 
-        arcs.append("text").attr("transform", function (d) {
-            d.innerRadius = 0;
-            d.outerRadius = r;
-            d.angle = (d.startAngle + d.endAngle) / 2;
-            return "rotate(" + (d.angle * 180 / Math.PI - 90) + ")translate(" + (d.outerRadius - 10) + ")";
-        })
-            .attr("text-anchor", "end")
-            .text(function (d, i) { return wheelData[i].label; });
+        // arcs.append("text").attr("transform", function (d) {
+        //     d.innerRadius = 0;
+        //     d.outerRadius = r;
+        //     d.angle = (d.startAngle + d.endAngle) / 2;
+        //     return "rotate(" + (d.angle * 180 / Math.PI - 90) + ")translate(" + (d.outerRadius - 10) + ")";
+        // })
+        //     .attr("text-anchor", "end")
+        //     .text(function (d, i) { return wheelData[i].label; });
 
         container.on("click", spin);
 
@@ -240,8 +245,8 @@
                         .text("Та дараах хонжворыг хожлоо ---> " + wheelData[picked].label);
                     oldrotation = rotation;
                     replayButton.style.display = "block";
-                    resultImage.style.width="150px";
-                    resultImage.style.height="150px";
+                    resultImage.style.width="200px";
+                    resultImage.style.height="200px";
                     resultImage.src = wheelData[picked].image
                     
                     saveResult(wheelData[picked].value);
