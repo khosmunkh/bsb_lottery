@@ -21,6 +21,12 @@ def validate_register_no(request):
             return JsonResponse({'valid': False})
         return JsonResponse({'valid': True})
 
+
+def list(request):
+    lottery_list = LotteryResult.objects.all()
+    return render(request, 'list.html', {"lottery_list":lottery_list})
+
+
 def get_wheel_items(request):
     wheel_items = Wheel.objects.filter(is_active=True, quantity__gt=0)
     data = [

@@ -6,6 +6,7 @@ from . import views
 
 urlpatterns = [
     path('', views.index, name='index'),
+    path('list/', views.list, name='list'),
     path('validate_code/', views.validate_code, name='validate_code'),
     path('validate_register_no/', views.validate_register_no, name='validate_register_no'),
     path('get_wheel_items/', views.get_wheel_items, name='get_wheel_items'),  # Added for dynamic wheel data

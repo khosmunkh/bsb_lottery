@@ -1,0 +1,41 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}Spin the Wheel{% endblock title %}
+{% block style %}
+<style>
+    body{
+        background-image: none !important;
+    }
+</style>
+{% endblock style %}
+{% block content %}
+
+<table id="example" class="table table-striped">
+    <thead>
+        <tr>
+            <th>Код</th>
+            <th>Регистрийн дугаар</th>
+            <th>Хожсон бараа</th>
+            <th>Хожсон огноо</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for lottery in lottery_list %}
+        <tr>
+            <td>{{ lottery.lottery }}</td>
+            <td>{{ lottery.register_no }}</td>
+            <td>{{ lottery.item.title }}</td>
+            <td>{{ lottery.created_at | date:'Y-m-d H:i:s A' }}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+{% endblock content %}
+{% block scripts %}
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.datatables.net/1.13.3/js/jquery.dataTables.min.js"></script>
+<script>
+    let table = new DataTable('#example');
+</script>
+{% endblock scripts %}
