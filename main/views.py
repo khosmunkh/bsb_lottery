@@ -17,7 +17,8 @@ def validate_code(request):
 def validate_register_no(request):
     if request.method == 'POST':
         register_no = request.POST.get('register_no')
-        #TODO: Register no hud urttai baival shalgah
+        if len(register_no) != 10:
+            return JsonResponse({'valid': False})
         return JsonResponse({'valid': True})
 
 def get_wheel_items(request):
