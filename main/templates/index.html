@@ -3,28 +3,62 @@
 {% block title %}Spin the Wheel{% endblock title %}
 {% block style %}
 <style>
+    /* Wheel Enhancements */
     #chart {
         width: 100%;
         max-width: 500px;
         height: auto;
         margin: auto;
         display: block;
+        position: relative;
     }
 
-    #question {
-        margin-top: 30px;
-        text-align: center;
+    .chartholder {
+        border: 10px solid #0056b3;
+        border-radius: 50%;
+        box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.3);
+        background-color: white;
     }
 
-    #question h1 {
-        font-size: 30px;
-        font-weight: bold;
-        margin: 0;
+    .slice path {
+        fill: none;
+        stroke: #fff;
+        stroke-width: 2px;
     }
 
+    .arrow {
+        fill: #ff0000;
+    }
+
+    /* Button Enhancements */
     .btn-custom {
-        font-size: 16px;
+        font-size: 18px;
+        padding: 12px 24px;
+        background-color: #007bff;
+        color: white;
+        border-radius: 50px;
+        box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.2);
+        transition: background-color 0.3s ease, transform 0.2s ease;
+    }
+
+    .btn-custom:hover {
+        background-color: #0056b3;
+        transform: scale(1.1);
+    }
+
+    #replayButton {
+        font-size: 18px;
         padding: 10px 20px;
+        background-color: #6c757d;
+        color: white;
+        border-radius: 50px;
+        box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.2);
+        transition: background-color 0.3s ease, transform 0.2s ease;
+    }
+
+    #replayButton:hover {
+        background-color: #495057;
+        transform: scale(1.1);
     }
 
     .spin-button {
@@ -33,11 +67,19 @@
         fill: #fff;
         cursor: pointer;
         user-select: none;
-        transition: fill 0.2s;
+        transition: fill 0.2s, transform 0.2s;
     }
 
     .spin-button:hover {
-        fill: #201b1b;
+        fill: #0056b3;
+        transform: rotate(5deg);
+    }
+
+    /* Wheel Image Styling */
+    .slice image {
+        width: 80px;
+        height: 60px;
+        border-radius: 10px;
     }
 
     @media (max-width: 576px) {
@@ -48,16 +90,37 @@
 </style>
 {% endblock style %}
 {% block content %}
+<div class="modal fade" id="resultModal" tabindex="-1" aria-labelledby="resultModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="resultModalLabel">Хожсон бараа</h5>
+            </div>
+            <div class="modal-body text-center">
+                <p id="winningDetails"></p>
+                <img id="modalResultImage" src="" alt="" style="width: 200px; height: 200px;" />
+                <p><strong>Регистрийн дугаар:</strong> <span id="modalRegisterNo"></span></p>
+                <p><strong>Хожсон бараа:</strong> <span id="modalItemName"></span></p>
+                <p><strong>Огноо:</strong> <span id="modalDate"></span></p>
+
+            </div>
+            <div class="modal-footer">
+                <button id="printButton"  class="btn btn-primary" onclick="printModal()">Хэвлэх</button>
+                <button id="replayButton" class="btn btn-secondary" onclick="window.location.reload()">Дахин эхлүүлэх</button>
+            </div>
+        </div>
+    </div>
+</div>
 <div class="row">
     <div class="col-md-4"></div>
     <div class="col-md-4 card">
         <div id="validation" class="text-center my-4">
             <input type="text" id="code" class="form-control mb-2" placeholder="Сугалааны дугаараа оруулна уу." />
-            <button class="btn btn-primary btn-custom" onclick="validateCode()">Оруулах</button>
+            <button class="btn btn-custom" onclick="validateCode()">Оруулах</button>
         </div>
         <div id="register-form" class="text-center my-4" style="display: none;">
             <input type="text" id="register_no" class="form-control mb-2" placeholder="Регистрийн дугаараа оруулна уу" />
-            <button class="btn btn-primary btn-custom" onclick="validateRegisterNo()">Оруулах</button>
+            <button class="btn btn-custom" onclick="validateRegisterNo()">Оруулах</button>
         </div>
     </div>
     <div class="col-md-4"></div>
@@ -67,9 +130,6 @@
     <div class="col-md-4"></div>
     <div class="col-md-4">
         <div id="question" style="display: none;">
-            <h1></h1>
-            <img id="resultImage" src alt="">
-            <button id="replayButton" style="display: none;" class="btn btn-secondary" onclick="window.location.reload()">Дахин эхлүүлэх</button>
         </div>
     </div>
     <div class="col-md-4"></div>
@@ -80,6 +140,41 @@
 {% endblock content %}
 {% block scripts %}
 <script>
+    function printModal() {
+    const modalBody = document.querySelector('.modal-body').innerHTML;
+
+    const printWindow = window.open('', '', 'width=600,height=400');
+    printWindow.document.write(`
+        <html>
+            <head>
+                <title>Print Хожсон бараа</title>
+                <style>
+                    body {
+                        font-family: Arial, sans-serif;
+                        margin: 0;
+                        padding: 20px;
+                    }
+                    .modal-body {
+                        padding: 15px;
+                    }
+                    img {
+                        max-width: 100%;
+                        height: auto;
+                        margin: 20px 0;
+                    }
+                </style>
+            </head>
+            <body>
+                ${modalBody}
+            </body>
+        </html>
+    `);
+
+    printWindow.document.close();
+    printWindow.focus();
+    printWindow.print();
+    printWindow.close();
+}
     function getCsrfToken() {
         var name = 'csrftoken';
         var cookieValue = null;
@@ -151,20 +246,20 @@
     }
 
     function loadWheel() {
-    fetch("{% url 'get_wheel_items' %}")
-        .then(response => response.json())
-        .then(data => {
-            if (data.has_items) {
-                wheelData = data.items;
-                document.getElementById("chart").style.display = "block";
-                document.getElementById("question").style.display = "block";
-                renderWheel();
-            } else {
-                document.getElementById("question").style.display = "block";
-                document.querySelector("#question h1").innerText = "Бонус бэлэг бараа дууссан байна.";
-            }
-        });
-}
+        fetch("{% url 'get_wheel_items' %}")
+            .then(response => response.json())
+            .then(data => {
+                if (data.has_items) {
+                    wheelData = data.items;
+                    document.getElementById("chart").style.display = "block";
+                    document.getElementById("question").style.display = "block";
+                    renderWheel();
+                } else {
+                    document.getElementById("question").style.display = "block";
+                    document.querySelector("#question h1").innerText = "Бонус бэлэг бараа дууссан байна.";
+                }
+            });
+    }
 
     function renderWheel() {
         var padding = { top: 20, right: 40, bottom: 0, left: 0 },
@@ -209,23 +304,13 @@
                 d.innerRadius = 0;
                 d.outerRadius = r;
                 d.angle = (d.startAngle + d.endAngle) / 2;
-                return "translate(" + arc.centroid(d) + ")rotate(" + (d.angle * 180 / Math.PI - 90) + ")translate(-25,-25)";
+                return "translate(" + arc.centroid(d) + ")rotate(" + (d.angle * 180 / Math.PI - 90) + ")translate(-40,-30)";
             });
-
-        // arcs.append("text").attr("transform", function (d) {
-        //     d.innerRadius = 0;
-        //     d.outerRadius = r;
-        //     d.angle = (d.startAngle + d.endAngle) / 2;
-        //     return "rotate(" + (d.angle * 180 / Math.PI - 90) + ")translate(" + (d.outerRadius - 10) + ")";
-        // })
-        //     .attr("text-anchor", "end")
-        //     .text(function (d, i) { return wheelData[i].label; });
 
         container.on("click", spin);
 
         function spin(d) {
-            const replayButton = document.querySelector("#replayButton")
-            const resultImage = document.querySelector("#resultImage")
+          
             container.on("click", null);
 
             var ps = 360 / wheelData.length,
@@ -244,10 +329,6 @@
                     d3.select("#question h1")
                         .text("Та дараах хонжворыг хожлоо ---> " + wheelData[picked].label);
                     oldrotation = rotation;
-                    replayButton.style.display = "block";
-                    resultImage.style.width="200px";
-                    resultImage.style.height="200px";
-                    resultImage.src = wheelData[picked].image
                     
                     saveResult(wheelData[picked].value);
                 });
@@ -264,6 +345,11 @@
         function saveResult(item_id) {
             var registerNo = document.getElementById("register_no").value;
             var code = document.getElementById("code").value;
+            const resultImage = document.querySelector("#modalResultImage")
+            const modalRegisterNo = document.querySelector("#modalRegisterNo");
+            const modalDate = document.querySelector("#modalDate");
+            const modalItemName = document.querySelector("#modalItemName");
+            const winningDetails = document.querySelector("#winningDetails");
             fetch("{% url 'save_result' %}", {
                 method: "POST",
                 headers: {
@@ -275,7 +361,13 @@
                 .then(response => response.json())
                 .then(data => {
                     if (data.success) {
-                        showToast("Та " + data.title + " хожлоо танд баяр хүргэе");
+                        winningDetails.textContent = "Та дараах хонжворыг хожлоо!";
+                        resultImage.src = wheelData[picked].image;
+                        modalRegisterNo.textContent = registerNo;
+                        modalDate.textContent = data.created_date;
+                        modalItemName.textContent = wheelData[picked].label;
+                        const resultModal = new bootstrap.Modal(document.getElementById('resultModal'));
+                        resultModal.show();
                     } else {
                         showToast("Системийн алдаа гарлаа.", false);
                     }
@@ -286,7 +378,8 @@
             .attr("transform", "translate(" + (w + padding.left + padding.right) + "," + ((h / 2) + padding.top) + ")")
             .append("path")
             .attr("d", "M-" + (r * .15) + ",0L0," + (r * .05) + "L0,-" + (r * .05) + "Z")
-            .style({ "fill": "black" });
+            .attr("class", "arrow")
+            .style({ "fill": "red" });
 
         container.append("circle")
             .attr("cx", 0)

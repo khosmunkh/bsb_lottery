@@ -7,6 +7,7 @@ services:
       - POSTGRES_DB=postgres
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=bsb@mn
+      - TZ=Asia/Ulaanbaatar
     ports:
       - "6013:5432"
   web:
@@ -18,14 +19,6 @@ services:
       context: .
     ports:
       - "8002:8002"
-  nginx:
-      build: ./nginx
-      volumes:
-        - static:/static  # Mount the static volume
-      ports:
-        - "8080:80"  # Use port 8080 for this project's NGINX
-      depends_on:
-        - web
 
 volumes:
   static:

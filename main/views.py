@@ -1,6 +1,7 @@
 from django.shortcuts import render, get_object_or_404
 from django.http import JsonResponse
 from .models import Wheel, Lottery, LotteryResult
+import datetime
 
 def index(request):
     return render(request, 'index.html')
@@ -46,8 +47,7 @@ def save_result(request):
         code = request.POST.get('code')
         lottery = get_object_or_404(Lottery, code=code)
         wheel_item = get_object_or_404(Wheel, id=item_id)
-        
-        LotteryResult.objects.create(
+        test = LotteryResult.objects.create(
             lottery=lottery,
             item=wheel_item,
             register_no=register_no
@@ -57,4 +57,4 @@ def save_result(request):
             lottery.save()
             wheel_item.quantity -= 1
             wheel_item.save()
-        return JsonResponse({'success': True, 'title':wheel_item.title})
+        return JsonResponse({'success': True, 'title':wheel_item.title, 'created_date': datetime.datetime.strftime( test.created_at, '%Y-%m-%d %H:%M:%S %p')})  
