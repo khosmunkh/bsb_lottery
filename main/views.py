@@ -58,19 +58,22 @@ def get_wheel_items(request):
 
 def save_result(request):
     if request.method == 'POST':
-        register_no = request.POST.get('register_no')
+        phone_no = request.POST.get('phone_no')
         item_id = request.POST.get('item_id')
-        code = request.POST.get('code')
+        code = request.POST.get('code').upper()
         lottery = get_object_or_404(Lottery, code=code)
         wheel_item = get_object_or_404(Wheel, id=item_id)
         test = LotteryResult.objects.create(
             lottery=lottery,
             item=wheel_item,
-            register_no=register_no
+            register_no=phone_no
         )
-        if code != 'test0000':
+
+        test_codes = ['TST11000', 'TST12000', 'TST13000', 'TST14000', 'TST15000', 'TST16000', 'TST17000' ,'TST18000' ,'TST19000']
+
+        if code not in test_codes:
             lottery.is_active = False
             lottery.save()
             wheel_item.quantity -= 1
             wheel_item.save()
-        return JsonResponse({'success': True, 'title':wheel_item.title, 'created_date': datetime.datetime.strftime( test.created_at, '%Y-%m-%d %H:%M:%S %p')})  
+        return JsonResponse({'success': True, 'title':wheel_item.title, 'created_date': datetime.datetime.strftime( test.created_at, '%Y-%m-%d %H:%M:%S %p')})   
