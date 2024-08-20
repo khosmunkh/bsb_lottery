@@ -6,11 +6,13 @@ from django.db import models
 from django.db import models
 
 class Wheel(models.Model):
-    image = models.ImageField(upload_to='wheel/')
-    title = models.CharField(max_length=100)
-    chance = models.FloatField(default=1.0, help_text="Chance of taarah magadlal")
-    is_active = models.BooleanField(default=True)
-    quantity = models.IntegerField(default=0)
+    image = models.ImageField(upload_to='wheel/', verbose_name="Барааны зураг")
+    wheel_slice_color =  models.CharField(max_length=20, default='#ffffff', verbose_name="Хүрдний хэрчмийн өнгө")
+    wheel_text_color =  models.CharField(max_length=20, default='#000000', verbose_name="Хүрдний хэрчмийн текст өнгө")
+    title = models.CharField(max_length=100, verbose_name="Барааны нэр")
+    chance = models.FloatField(default=1.0, help_text="Зөвхөн тоо хийх | % бичиж болохгүй", verbose_name="Таарах магадлал")
+    is_active = models.BooleanField(default=True, verbose_name="Хүрдэнд харагдах эсэх")
+    quantity = models.IntegerField(default=0, verbose_name="Үлдэгдэл")
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 

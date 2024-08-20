@@ -6,6 +6,11 @@ import datetime
 def index(request):
     return render(request, 'index.html')
 
+
+def test(request):
+    return render(request, 'test.html')
+
+
 def validate_code(request):
     if request.method == 'POST':
         code = request.POST.get('code')
@@ -15,12 +20,16 @@ def validate_code(request):
         except Lottery.DoesNotExist:
             return JsonResponse({'valid': False})
 
-def validate_register_no(request):
+def validate_phone_no(request):
     if request.method == 'POST':
-        register_no = request.POST.get('register_no')
-        if len(register_no) != 10:
+        phone_no = request.POST.get('phone_no')
+        if len(phone_no) == 8:
+            if phone_no.startswith(('6', '7', '8', '9')):
+                return JsonResponse({'valid': True})
+            else:
+                return JsonResponse({'valid': False})
+        else:
             return JsonResponse({'valid': False})
-        return JsonResponse({'valid': True})
 
 
 def list(request):
@@ -29,16 +38,23 @@ def list(request):
 
 
 def get_wheel_items(request):
-    wheel_items = Wheel.objects.filter(is_active=True, quantity__gt=0)
-    data = [
-        {'label': item.title, 'value': item.pk, 'image': item.image.url, 'chance': item.chance}
-        for item in wheel_items
-    ]
-    response = {
-        'has_items': bool(wheel_items),
-        'items': data
-    }
-    return JsonResponse(response, safe=False)
+    items = Wheel.objects.filter(is_active=True)
+    data = []
+    for item in items:
+        if item.quantity > 0:
+            calculated_chance = item.chance
+        else:
+            calculated_chance = 0.0
+        data.append({
+            'id': item.id,
+            'title': item.title.upper(),
+            'color': item.wheel_slice_color,
+            'text_color': item.wheel_text_color,
+            'chance': calculated_chance,
+            'image_url': item.image.url
+        })
+    
+    return JsonResponse({'wheel_items': data})
 
 def save_result(request):
     if request.method == 'POST':

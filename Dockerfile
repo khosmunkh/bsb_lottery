@@ -10,6 +10,10 @@ COPY ./main /app/main
 COPY ./manage.py /app/
 COPY ./.env /app/
 
+RUN apt-get update && \
+    apt-get install -y tzdata && \
+    ln -sf /usr/share/zoneinfo/Asia/Ulaanbaatar /etc/localtime && \
+    dpkg-reconfigure -f noninteractive tzdata
 
 WORKDIR /app
 
