@@ -98,12 +98,12 @@
 <div class="row">
     <div id="input-container">
         <div id="validation" class="text-center my-4">
-            <input type="text" id="code" class="form-control styled-input mb-2" autocomplete="off"
-                   placeholder="Сугалааны дугаараа оруулна уу." />
+            <input type="text" id="code" class="form-control styled-input mb-2" required="true" autocomplete="off"
+                   placeholder="Сугалааны дугаараа оруулна уу."  maxlength="8" />
         </div>
         <div id="register-form" class="text-center my-4">
-            <input type="number" id="phone_no" class="form-control styled-input mb-2" autocomplete="off"
-                   placeholder="Утасны дугаараа оруулна уу" />
+            <input type="number" id="phone_no" class="form-control styled-input mb-2" required="true" maxlength=8 autocomplete="off"
+                   placeholder="Утасны дугаараа оруулна уу" oninput="this.value = this.value.slice(0, 8);" />
         </div>
         <img src="{% static 'images/oruulah.png' %}" onclick="validateBoth()" alt="" class="button-effect">
     </div>
@@ -127,20 +127,22 @@
         return cookieValue;
     }
 
-    function showToast(message, success = true) {
-        console.log(message);
-        var toastElement = document.createElement('div');
-        toastElement.className = `toast align-items-center text-white ${success ? 'bg-success' : 'bg-danger'}`;
-        toastElement.innerHTML = `<div class="d-flex"><div class="toast-body">${message}</div><button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button></div>`;
-        document.body.appendChild(toastElement);
-        var toast = new bootstrap.Toast(toastElement);
-        toast.show();
-        setTimeout(() => toastElement.remove(), 5000);
-    }
-
     function validateBoth() {
         var code = document.getElementById("code").value;
         var phone_no = document.getElementById("phone_no").value;
+        if(!phone_no && !code){
+            showToast("Хэрэгтэй мэдээллүүдээ бөглөнө үү", false);
+            return;
+        }
+        if (!code) {
+            showToast("Сугалааны код хоосон байж болохгүй", false);
+            return;
+        }
+        if (!phone_no) {
+            showToast("Утасны дугаар заавал бөглөнө үү", false);
+            return;
+        }
+        blockPage();
         const data = new URLSearchParams();
         data.append("code", code);
         data.append("phone_no", phone_no);
@@ -152,14 +154,15 @@
             },
             body: data.toString(),
         })
+
         .then(response => response.json())
         .then(data => {
-            console.log(data);
-            showToast(data.msg);
+            unBlockPage();
             if (data.valid) {
+                showToast(data.msg, true);
                 window.location.href = "{% url 'wheel' %}?phone_no=" + encodeURIComponent(data.phone_no) + "&code=" + encodeURIComponent(data.code);
             } else {
-                showToast("Буруу эсвэл ашиглагдсан код байна.", false);
+                showToast(data.msg, false);
             }
         });
     }

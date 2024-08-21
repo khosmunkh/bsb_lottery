@@ -10,7 +10,7 @@ class Wheel(models.Model):
     wheel_text_color =  models.CharField(max_length=20, default='#000000', verbose_name="Хүрдний хэрчмийн текст өнгө")
     title = models.CharField(max_length=100, verbose_name="Барааны нэр")
     chance = models.FloatField(default=1.0, help_text="Зөвхөн тоо хийх | % бичиж болохгүй", verbose_name="Таарах магадлал")
-    is_active = models.BooleanField(default=True, verbose_name="Хүрдэнд харагдах эсэх")
+    is_active = models.BooleanField(default=True, verbose_name="Шагналгүй хүрд эсэх")
     quantity = models.IntegerField(default=0, verbose_name="Үлдэгдэл")
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
@@ -42,8 +42,8 @@ class LotteryResult(models.Model):
     lottery = models.ForeignKey(Lottery, on_delete=models.DO_NOTHING)
     item = models.ForeignKey(Wheel, on_delete=models.DO_NOTHING)
     phone_no = models.CharField(max_length=100, verbose_name='Худалдан авагчийн регистрийн дугаар')
-    created_at = models.DateTimeField(default=datetime.now(), verbose_name='Үүссэн огноо')
-    updated_at = models.DateTimeField(default=datetime.now(), verbose_name='Шинэчилсэн/Зассан огноо')
+    created_at = models.DateTimeField(auto_now=True, verbose_name='Үүссэн огноо')
+    updated_at = models.DateTimeField(auto_now=True, verbose_name='Шинэчилсэн/Зассан огноо')
 
     def __str__(self):
         return self.phone_no

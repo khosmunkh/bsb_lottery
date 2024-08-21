@@ -9,13 +9,16 @@
         font-weight: normal;
         font-style: normal;
     }
+
     #canvas {
         margin: 0 auto;
         width: 35%;
     }
+
     body {
         background-image: url("{% static 'images/bg-2.png' %}") !important;
     }
+
     #pointer {
         position: absolute;
         top: 5vh;
@@ -65,15 +68,15 @@
 
     .styled-input {
         width: 100%;
-        max-width: none; 
-        height: 70px; 
-        border-radius: 35px; 
+        max-width: none;
+        height: 70px;
+        border-radius: 35px;
         border: none;
         padding-left: 30px;
         padding-right: 30px;
         background: linear-gradient(to bottom, #ffffff, #e0e0e0);
         box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.2), 0 4px 20px rgba(0, 0, 0, 0.1);
-        font-size: 24px; 
+        font-size: 24px;
         color: #555;
         text-align: center;
         margin-bottom: 20px;
@@ -107,33 +110,29 @@
     }
 
     .custom-modal-content {
-    border: 5px solid #9C27B0;
-    border-radius: 15px;
-    padding: 15px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
-}
+        border: 5px solid #9C27B0;
+        border-radius: 15px;
+        padding: 15px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+    }
 
-.modal-title-image {
-    max-width: 100%;
-    height: auto;
-}
+    .modal-title-image {
+        max-width: 100%;
+        height: auto;
+    }
 
-.modal-footer {
-    display: flex;
-    justify-content: space-around;
-    border-top: none;
-}
+    .modal-footer {
+        display: flex;
+        justify-content: center;
+        gap: 20px;
+        border-top: none;
+        flex-wrap: wrap;
+    }
 
-.custom-button {
-    background: none;
-    border: none;
-    padding: 0;
-    cursor: pointer;
-}
-
-.button-image {
-    max-width: 60%; /* Adjust width as needed */
-}
+    .button-image {
+        max-width: 100%;
+        margin: 0 auto;
+    }
 </style>
 {% endblock style %}
 {% block content %}
@@ -141,34 +140,30 @@
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content custom-modal-content">
             <div class="modal-header justify-content-center">
-                <img src="{% static 'images/tanii_hojson_baraa.png' %}" alt="Таны хожсон бараа" class="modal-title-image">
+                <img src="{% static 'images/tanii_hojson_baraa.png' %}" alt="Таны хожсон бараа"
+                    class="modal-title-image">
             </div>
             <div class="modal-body text-center">
                 <p id="winningDetails"></p>
-                <img id="modalResultImage" src="{% static 'images/suralts.png' %}" alt=""/>
+                <img id="modalResultImage" src="{% static 'images/suralts.png' %}" alt="" width="50%" />
                 <p><strong>Утасны дугаар:</strong> <span id="modalPhoneNum"></span></p>
                 <p><strong>Хожсон бараа:</strong> <span id="modalItemName"></span></p>
                 <p><strong>Огноо:</strong> <span id="modalDate"></span></p>
             </div>
             <div class="modal-footer">
-                <button id="printButton" class="custom-button" onclick="printModal()">
-                    <img src="{% static 'images/hewleh.png' %}" alt="Хэвлэх" class="button-image">
-                </button>
-                <button id="replayButton" class="custom-button" onclick="window.location.reload()">
-                    <img src="{% static 'images/dahin_ehleh.png' %}" alt="Дахин эхлүүлэх" class="button-image">
-                </button>
+                <img src="{% static 'images/hewleh.png' %}" onclick="printModal()" class="button-effect">
+                <img src="{% static 'images/dahin_ehleh.png' %}" onclick="window.location.href = '/';" class="button-effect">
             </div>
         </div>
     </div>
 </div>
-<div class="modal fade" id="resultModalThanks" tabindex="-1" aria-labelledby="resultModalThanksLabel" aria-hidden="true">
+<div class="modal fade" id="resultModalThanks" tabindex="-1" aria-labelledby="resultModalThanksLabel"
+    aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content custom-modal-content">
             <div class="modal-body text-center">
-                <img id="modalResultImage" src="{% static 'images/tand_bayrlalaa.png' %}" alt=""/>
-                <button id="replayButton" class="custom-button m-4" onclick="window.location.reload()">
-                    <img src="{% static 'images/dahin_ehleh.png' %}" alt="Дахин эхлүүлэх" class="button-image">
-                </button>
+                <img id="modalResultImageThanks" src="{% static 'images/tand_bayrlalaa.png' %}" alt="" />
+                <img src="{% static 'images/dahin_ehleh.png' %}" onclick="window.location.href = '/';" class="button-image button-effect">
             </div>
         </div>
     </div>
@@ -176,33 +171,27 @@
 <div class="row">
     <div id="input-container">
         <div id="pointer"></div>
-        <canvas id="canvas" width="800" height="800" ></canvas>
-        <button onclick="showModal()">gg</button>
+        <canvas id="canvas" width="800" height="800"></canvas>
         <img id="spin-button" src="{% static 'images/erguuleh.png' %}" class="button-effect">
     </div>
 </div>
 {% endblock content %}
 {% block scripts %}
 <script>
-    function showModal() {
-        const resultModal = new bootstrap.Modal(document.getElementById('resultModalThanks'));
-                resultModal.show();
-    }
-
     document.addEventListener('DOMContentLoaded', function loadWheel() {
         fetch("{% url 'get_wheel_items' %}")
-        .then(response => response.json())
-        .then(data => {
-            if (data.wheel_items.length > 0) {
-                wheelData = data.wheel_items;
-                document.getElementById("canvas").style.display = "block";
-                renderWheel();
-            } else {
-                document.getElementById("question").style.display = "block";
-                document.querySelector("#question h1").innerText = "Бонус бэлэг бараа дууссан байна.";
-            }
-        });
-    } )
+            .then(response => response.json())
+            .then(data => {
+                if (data.wheel_items.length > 0) {
+                    wheelData = data.wheel_items;
+                    document.getElementById("canvas").style.display = "block";
+                    renderWheel();
+                } else {
+                    document.getElementById("question").style.display = "block";
+                    document.querySelector("#question h1").innerText = "Бонус бэлэг бараа дууссан байна.";
+                }
+            });
+    })
     function getCsrfToken() {
         var name = 'csrftoken';
         var cookieValue = null;
@@ -219,34 +208,45 @@
         return cookieValue;
     }
 
+    function getQueryParam(param) {
+        const urlParams = new URLSearchParams(window.location.search);
+        return urlParams.get(param);
+    }
+
     function printModal() {
         const modalBody = document.querySelector('.modal-body').innerHTML;
-        const printWindow = window.open('', '', 'width=600,height=400');
+        const printWindow = window.open('', '', 'width=600,height=800'); // Larger window size for visibility
+
         printWindow.document.write(`
-            <html>
-                <head>
-                    <title>Print Хожсон бараа</title>
-                    <style>
-                        body {
-                            font-family: Arial, sans-serif;
-                            margin: 0;
-                            padding: 20px;
-                        }
-                        .modal-body {
-                            padding: 15px;
-                        }
-                        img {
-                            max-width: 100%;
-                            height: auto;
-                            margin: 20px 0;
-                        }
-                    </style>
-                </head>
-                <body>
-                    ${modalBody}
-                </body>
-            </html>
-        `);
+        <html>
+            <head>
+                <title>Print Хожсон бараа</title>
+                <style>
+                    @page {
+                        margin: 0; /* Removes default margins, headers, and footers */
+                    }
+                    body {
+                        font-family: 'Courier New', Courier, monospace; /* Monospace font */
+                        margin: 0;
+                        padding: 5px;
+                        font-size: 12px; /* Adjust font size */
+                        width: 100%;
+                    }
+                    .modal-body {
+                        padding: 5px;
+                    }
+                    img {
+                        max-width: 100%;
+                        height: auto;
+                        margin: 10px 0;
+                    }
+                </style>
+            </head>
+            <body>
+                ${modalBody}
+            </body>
+        </html>
+    `);
 
         printWindow.document.close();
         printWindow.focus();
@@ -254,21 +254,22 @@
         printWindow.close();
     }
 
+
     var wheelData = [];
 
     function loadWheel() {
         fetch("{% url 'get_wheel_items' %}")
-        .then(response => response.json())
-        .then(data => {
-            if (data.wheel_items.length > 0) {
-                wheelData = data.wheel_items;
-                document.getElementById("canvas").style.display = "block";
-                renderWheel();
-            } else {
-                document.getElementById("question").style.display = "block";
-                document.querySelector("#question h1").innerText = "Бонус бэлэг бараа дууссан байна.";
-            }
-        });
+            .then(response => response.json())
+            .then(data => {
+                if (data.wheel_items.length > 0) {
+                    wheelData = data.wheel_items;
+                    document.getElementById("canvas").style.display = "block";
+                    renderWheel();
+                } else {
+                    document.getElementById("question").style.display = "block";
+                    document.querySelector("#question h1").innerText = "Бонус бэлэг бараа дууссан байна.";
+                }
+            });
     }
 
     function renderWheel() {
@@ -298,7 +299,10 @@
             },
         });
 
-        document.getElementById('spin-button').addEventListener('click', function() {
+        document.getElementById('spin-button').addEventListener('click', function () {
+            const spinButton = this;
+            spinButton.style.pointerEvents = 'none';
+            spinButton.style.opacity = '0.5'; 
             const randomValue = Math.random() * totalChances;
             let cumulativeChance = 0;
             let selectedSegmentIndex;
@@ -313,24 +317,18 @@
             const stopAt = myWheel.getRandomForSegment(selectedSegmentIndex);
             myWheel.animation.stopAngle = stopAt;
             myWheel.startAnimation();
-            document.getElementById('spin-button').setAttribute('disabled', true);
         });
 
         function alertPrize(indicatedSegment) {
-            // const phoneNo = document.getElementById("phone_no").value;
-            // const prizeTitle = indicatedSegment.text;
-            // const code = document.getElementById("code").value;
+            const phoneNo = getQueryParam('phone_no');
+            const prizeTitle = indicatedSegment.text;
+            const code = getQueryParam('code');
             const wheelItem = wheelData.find(item => item.title === prizeTitle);
 
-            document.getElementById("modalItemName").textContent = prizeTitle;
-            document.getElementById("modalPhoneNum").textContent = phoneNo;
-            document.getElementById("modalDate").textContent = new Date().toLocaleString();
-            document.getElementById("modalResultImage").src = wheelItem.image_url;
-
             const data = new URLSearchParams();
-            data.append('phone_no', '99218020');
-            data.append('item_id', '6');
-            data.append('code', 'TST11000');
+            data.append('phone_no', phoneNo);
+            data.append('item_id', wheelItem.id);
+            data.append('code', code);
 
             fetch("{% url 'save_result' %}", {
                 method: "POST",
@@ -340,20 +338,31 @@
                 },
                 body: data.toString(),
             })
-            .then(response => response.json())
-            .then(data => {
-                if (data.success) {
-                    document.getElementById("modalDate").textContent = data.created_date;
-                } else {
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        if (data.is_active) {
+                            document.getElementById("modalDate").textContent = data.created_date;
+                            document.getElementById("modalItemName").textContent = prizeTitle;
+                            document.getElementById("modalPhoneNum").textContent = phoneNo;
+                            document.getElementById("modalResultImage").src = wheelItem.image_url;
+                            const resultModal = new bootstrap.Modal(document.getElementById('resultModal'));
+                            resultModal.show();
+                        }
+                        else {
+                            const resultModal = new bootstrap.Modal(document.getElementById('resultModalThanks'));
+                            resultModal.show();
+                        }
+
+                    } else {
+                        showToast(data.msg, false);
+                    }
+
+                })
+                .catch(error => {
+                    console.error("Error saving result:", error);
                     showToast("Error saving result. Please try again.", false);
-                }
-                const resultModal = new bootstrap.Modal(document.getElementById('resultModal'));
-                resultModal.show();
-            })
-            .catch(error => {
-                console.error("Error saving result:", error);
-                showToast("Error saving result. Please try again.", false);
-            });
+                });
         }
     }
     const resultModalThanksElement = document.getElementById('resultModalThanks');
