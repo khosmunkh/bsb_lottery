@@ -3,25 +3,11 @@
 {% block title %}Бэлд Суралц Бүтээ{% endblock title %}
 {% block style %}
 <style>
-    /* Wheel Enhancements */
-    #canvas {
-        margin: 0 auto;
-        display: block;
-        width: 55%; /* Adjust the size to fit within the viewport */
-        height: auto; /* Ensure the aspect ratio is maintained */
-    }
-
-    #pointer {
-        position: absolute;
-        top: 30px;
-        left: 50%;
-        margin-left: -15px;
-        width: 0;
-        height: 0;
-        border-left: 15px solid transparent;
-        border-right: 15px solid transparent;
-        border-top: 30px solid rgb(0, 255, 200);
-        z-index: 1000;
+    @font-face {
+        font-family: 'GEEKS Rupster';
+        src: url("{% static 'fonts/GEEKS Rupster Script Free (Regular).ttf' %}") format('truetype');
+        font-weight: normal;
+        font-style: normal;
     }
 
     .btn-custom {
@@ -39,93 +25,91 @@
         transform: scale(1.1);
     }
 
-    .spin-button {
-        font-weight: bold;
-        font-size: 24px;
-        fill: #fff;
-        cursor: pointer;
-        user-select: none;
-        transition: fill 0.2s, transform 0.2s;
-        display: block;
-        margin: 20px auto 0 auto;
-    }
-
-    .spin-button:hover {
-        fill: #0056b3;
-        transform: rotate(5deg);
-    }
-
-    .card {
+    .custom-card {
         position: relative;
-        padding: 20px;
-        margin-top: 10px;
         text-align: center;
-        background-color: transparent;
+        justify-content: center;
+    }
+
+    img.button-effect {
+        cursor: pointer;
+        transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    img.button-effect:hover {
+        transform: scale(1.05);
+    }
+
+    img.button-effect:active {
+        transform: scale(0.95);
+    }
+
+    .styled-input {
+        width: 100%;
+        max-width: none; 
+        height: 70px; 
+        border-radius: 35px; 
         border: none;
+        padding-left: 30px;
+        padding-right: 30px;
+        background: linear-gradient(to bottom, #ffffff, #e0e0e0);
+        box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.2), 0 4px 20px rgba(0, 0, 0, 0.1);
+        font-size: 24px; 
+        color: #555;
+        text-align: center;
+        margin-bottom: 20px;
+    }
+
+    .styled-input::placeholder {
+        color: #888;
+        font-family: 'GEEKS Rupster', serif;
+        font-size: 1.8em;
+        text-align: center;
+    }
+
+    .styled-input:focus {
+        outline: none;
+        box-shadow: 0 0 8px rgba(0, 0, 0, 0.3);
+    }
+
+    .button-effect {
+        cursor: pointer;
+        transition: transform 0.2s ease, box-shadow 0.2s ease;
+        margin-top: 20px;
+        display: block;
     }
 
     #input-container {
-        margin-top: 10px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        height: 100vh;
+        width: 100%;
     }
 
-    @media (max-width: 576px) {
-        #question h1 {
-            font-size: 18px;
-        }
-
-        #canvas {
-            width: 100%;
-            height: auto;
-        }
+    #validation, #register-form {
+        width: 80%;
+        max-width: 1000px;
     }
 </style>
 {% endblock style %}
 {% block content %}
-<div class="modal fade" id="resultModal" tabindex="-1" aria-labelledby="resultModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="resultModalLabel">Хожсон бараа</h5>
-            </div>
-            <div class="modal-body text-center">
-                <p id="winningDetails"></p>
-                <img id="modalResultImage" src="" alt="" style="width: 200px; height: 200px;" />
-                <p><strong>Утасны дугаар:</strong> <span id="modalPhoneNum"></span></p>
-                <p><strong>Хожсон бараа:</strong> <span id="modalItemName"></span></p>
-                <p><strong>Огноо:</strong> <span id="modalDate"></span></p>
-            </div>
-            <div class="modal-footer">
-                <button id="printButton" class="btn btn-primary" onclick="printModal()">Хэвлэх</button>
-                <button id="replayButton" class="btn btn-secondary" onclick="window.location.reload()">Дахин эхлүүлэх</button>
-            </div>
+<div class="row">
+    <div id="input-container">
+        <div id="validation" class="text-center my-4">
+            <input type="text" id="code" class="form-control styled-input mb-2" autocomplete="off"
+                   placeholder="Сугалааны дугаараа оруулна уу." />
         </div>
-    </div>
-</div>
-
-<div class="row justify-content-center">
-    <div class="col-md-8">
-        <div class="card">
-            <div id="input-container">
-                <div id="validation" class="text-center my-4">
-                    <input type="text" id="code" class="form-control mb-2" placeholder="Сугалааны дугаараа оруулна уу." />
-                    <button class="btn btn-custom" onclick="validateCode()">Оруулах</button>
-                </div>
-                <div id="register-form" class="text-center my-4" style="display: none;">
-                    <input type="number" id="phone_no" class="form-control mb-2" placeholder="Утасны дугаараа оруулна уу" />
-                    <button class="btn btn-custom" onclick="validatePhoneNo()">Оруулах</button>
-                </div>
-            </div>
-            <div id="pointer" style="display: none;"></div>
-            <canvas id="canvas" width="800" height="800" style="display: none;"></canvas>
-            <button id="spin-button" class="spin-button btn-custom" style="display: none;">Эргүүлэх</button>
+        <div id="register-form" class="text-center my-4">
+            <input type="number" id="phone_no" class="form-control styled-input mb-2" autocomplete="off"
+                   placeholder="Утасны дугаараа оруулна уу" />
         </div>
+        <img src="{% static 'images/oruulah.png' %}" onclick="validateBoth()" alt="" class="button-effect">
     </div>
 </div>
 {% endblock content %}
 {% block scripts %}
-<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.7.1/gsap.min.js"></script>
-<script src="https://cdn.jsdelivr.net/gh/zarocknz/javascript-winwheel/Winwheel.min.js"></script>
-
 <script>
     function getCsrfToken() {
         var name = 'csrftoken';
@@ -143,44 +127,8 @@
         return cookieValue;
     }
 
-    function printModal() {
-        const modalBody = document.querySelector('.modal-body').innerHTML;
-        const printWindow = window.open('', '', 'width=600,height=400');
-        printWindow.document.write(`
-            <html>
-                <head>
-                    <title>Print Хожсон бараа</title>
-                    <style>
-                        body {
-                            font-family: Arial, sans-serif;
-                            margin: 0;
-                            padding: 20px;
-                        }
-                        .modal-body {
-                            padding: 15px;
-                        }
-                        img {
-                            max-width: 100%;
-                            height: auto;
-                            margin: 20px 0;
-                        }
-                    </style>
-                </head>
-                <body>
-                    ${modalBody}
-                </body>
-            </html>
-        `);
-
-        printWindow.document.close();
-        printWindow.focus();
-        printWindow.print();
-        printWindow.close();
-    }
-
-    var wheelData = [];
-
     function showToast(message, success = true) {
+        console.log(message);
         var toastElement = document.createElement('div');
         toastElement.className = `toast align-items-center text-white ${success ? 'bg-success' : 'bg-danger'}`;
         toastElement.innerHTML = `<div class="d-flex"><div class="toast-body">${message}</div><button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button></div>`;
@@ -190,157 +138,31 @@
         setTimeout(() => toastElement.remove(), 5000);
     }
 
-    function validateCode() {
+    function validateBoth() {
         var code = document.getElementById("code").value;
-        fetch("{% url 'validate_code' %}", {
+        var phone_no = document.getElementById("phone_no").value;
+        const data = new URLSearchParams();
+        data.append("code", code);
+        data.append("phone_no", phone_no);
+        fetch("{% url 'validate_both' %}", {
             method: "POST",
             headers: {
                 "Content-Type": "application/x-www-form-urlencoded",
                 "X-CSRFToken": getCsrfToken()
             },
-            body: "code=" + code,
+            body: data.toString(),
         })
         .then(response => response.json())
         .then(data => {
+            console.log(data);
+            showToast(data.msg);
             if (data.valid) {
-                document.getElementById("validation").style.display = "none";
-                document.getElementById("register-form").style.display = "block";
+                window.location.href = "{% url 'wheel' %}?phone_no=" + encodeURIComponent(data.phone_no) + "&code=" + encodeURIComponent(data.code);
             } else {
                 showToast("Буруу эсвэл ашиглагдсан код байна.", false);
             }
         });
     }
 
-    function validatePhoneNo() {
-        var phoneNo = document.getElementById("phone_no").value;
-        fetch("{% url 'validate_phone_no' %}", {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/x-www-form-urlencoded",
-                "X-CSRFToken": getCsrfToken()
-            },
-            body: "phone_no=" + phoneNo,
-        })
-        .then(response => response.json())
-        .then(data => {
-            if (data.valid) {
-                document.getElementById("register-form").style.display = "none";
-                document.getElementById("pointer").style.display = "block";
-                document.getElementById("spin-button").style.display = "block";
-                loadWheel();
-            } else {
-                showToast("Утасны дугаар буруу байна", false);
-            }
-        });
-    }
-
-    function loadWheel() {
-        fetch("{% url 'get_wheel_items' %}")
-        .then(response => response.json())
-        .then(data => {
-            if (data.wheel_items.length > 0) {
-                wheelData = data.wheel_items;
-                document.getElementById("canvas").style.display = "block";
-                renderWheel();
-            } else {
-                document.getElementById("question").style.display = "block";
-                document.querySelector("#question h1").innerText = "Бонус бэлэг бараа дууссан байна.";
-            }
-        });
-    }
-
-    function randomColor() {
-            return '#' + Math.floor(Math.random() * 16777215).toString(16);
-        }
-
-    function renderWheel() {
-        const segments = wheelData.map(item => ({
-            label: item.title,
-            fillStyle: item.color || randomColor(),
-            chance: item.chance,
-            textFillStyle: item.text_color || '#000000',
-        }));
-
-        const totalChances = segments.reduce((sum, segment) => sum + segment.chance, 0);
-
-        let myWheel = new Winwheel({
-            'numSegments': segments.length,
-            'outerRadius': 400,
-            'textFontSize': 14,
-            'segments': segments.map(segment => ({
-                'fillStyle': segment.fillStyle,
-                'text': segment.label,
-                'textFillStyle': segment.textFillStyle,
-            })),
-            'animation': {
-                'type': 'spinToStop',
-                'duration': 5,
-                'spins': 8,
-                'callbackFinished': alertPrize
-            },
-        });
-
-        document.getElementById('spin-button').addEventListener('click', function() {
-            const randomValue = Math.random() * totalChances;
-            let cumulativeChance = 0;
-            let selectedSegmentIndex;
-
-            for (let i = 0; i < segments.length; i++) {
-                cumulativeChance += segments[i].chance;
-                if (randomValue < cumulativeChance) {
-                    selectedSegmentIndex = i + 1;
-                    break;
-                }
-            }
-            const stopAt = myWheel.getRandomForSegment(selectedSegmentIndex);
-            myWheel.animation.stopAngle = stopAt;
-            myWheel.startAnimation();
-            document.getElementById('spin-button').setAttribute('disabled', true);
-        });
-
-        function alertPrize(indicatedSegment) {
-            const phoneNo = document.getElementById("phone_no").value;
-            const prizeTitle = indicatedSegment.text;
-            const code = document.getElementById("code").value;
-            const wheelItem = wheelData.find(item => item.title === prizeTitle);
-
-            document.getElementById("modalItemName").textContent = prizeTitle;
-            document.getElementById("modalPhoneNum").textContent = phoneNo;
-            document.getElementById("modalDate").textContent = new Date().toLocaleString();
-            document.getElementById("modalResultImage").src = wheelItem.image_url;
-
-            const data = new URLSearchParams();
-            data.append('phone_no', phoneNo);
-            data.append('item_id', wheelItem.id);
-            data.append('code', code);
-
-            fetch("{% url 'save_result' %}", {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/x-www-form-urlencoded",
-                    "X-CSRFToken": getCsrfToken()
-                },
-                body: data.toString(),
-            })
-            .then(response => response.json())
-            .then(data => {
-                if (data.success) {
-                    document.getElementById("modalDate").textContent = data.created_date;
-                } else {
-                    showToast("Error saving result. Please try again.", false);
-                }
-                const resultModal = new bootstrap.Modal(document.getElementById('resultModal'));
-                resultModal.show();
-            })
-            .catch(error => {
-                console.error("Error saving result:", error);
-                showToast("Error saving result. Please try again.", false);
-            });
-        }
-    }
-    const resultModalElement = document.getElementById('resultModal');
-    resultModalElement.addEventListener('hidden.bs.modal', function () {
-        window.location.reload();
-    });
 </script>
 {% endblock scripts %}

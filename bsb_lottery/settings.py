@@ -25,14 +25,17 @@ SECRET_KEY = 'django-insecure-e63z^r)vxj88$9c20r$7&^_u=0-q-rizg#z5el*$vv+--%n+=w
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['*']
-CORS_ALLOWED_ORIGINS = [
-    "http://192.168.70.212",
-    "http://192.168.70.212:8002",
-    "http://localhost:8002",
-]
+ALLOWED_HOSTS = ['103.153.141.250', 'it.bsb.mn', '127.0.0.1']
 
-CSRF_TRUSTED_ORIGINS = ['http://192.168.70.212:8080']
+CSRF_TRUSTED_ORIGINS = ['https://it.bsb.mn', 'http://it.bsb.mn', 'http://103.153.141.250', 'http://127.0.0.1']
+
+CORS_ALLOW_ALL_ORIGINS = False
+CORS_ALLOWED_ORIGINS = [
+    "https://it.bsb.mn",
+    "http://it.bsb.mn",
+    "http://103.153.141.250",
+    "http://127.0.0.1",
+]
 
 
 # Application definition
@@ -44,13 +47,15 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'main'
+    'corsheaders',
+    'main',
 ]
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',  # Ensure this line is present
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
@@ -81,23 +86,23 @@ WSGI_APPLICATION = 'bsb_lottery.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/5.0/ref/settings/#databases
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': os.getenv('DB_NAME', 'bsb_margaash'),
-        'USER': 'postgres',
-        'PASSWORD': os.getenv('DB_PASSWORD', '123'),
-        'HOST': os.getenv('DB_HOST', 'localhost'),
-        'PORT': os.getenv('DB_PORT', '5432'),
-    }
-}
-
 # DATABASES = {
 #     'default': {
-#         'ENGINE': 'django.db.backends.sqlite3',
-#         'NAME': BASE_DIR / 'db.sqlite3',
+#         'ENGINE': 'django.db.backends.postgresql',
+#         'NAME': os.getenv('DB_NAME', 'bsb_margaash'),
+#         'USER': 'postgres',
+#         'PASSWORD': os.getenv('DB_PASSWORD', '123'),
+#         'HOST': os.getenv('DB_HOST', 'localhost'),
+#         'PORT': os.getenv('DB_PORT', '5432'),
 #     }
 # }
+
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': BASE_DIR / 'db.sqlite3',
+    }
+}
 
 # Password validation
 # https://docs.djangoproject.com/en/5.0/ref/settings/#auth-password-validators

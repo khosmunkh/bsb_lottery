@@ -1,16 +1,53 @@
 from django.shortcuts import render, get_object_or_404
 from django.http import JsonResponse
 from .models import Wheel, Lottery, LotteryResult
+from django.views.decorators.csrf import csrf_exempt
+
 import datetime
 
+@csrf_exempt
 def index(request):
     return render(request, 'index.html')
 
 
-def test(request):
-    return render(request, 'test.html')
+@csrf_exempt
+def wheel(request):
+    return render(request, 'wheel.html')
 
 
+@csrf_exempt
+def validate_both(request):
+    if request.method == 'POST':
+        code = request.POST.get('code')
+        phone_no = request.POST.get('phone_no')
+
+        try:
+            lottery = get_object_or_404(Lottery, code=code, is_active=True)
+        except Lottery.DoesNotExist:
+            return JsonResponse({
+                'valid': False,
+                'code': code,
+                'phone_no': phone_no,
+                'msg': 'Ашиглагдсан эсвэл буруу код байна.',
+            })
+
+        if not phone_no or len(phone_no) != 8 or not phone_no.startswith(('6', '7', '8', '9')):
+            return JsonResponse({
+                'valid': False,
+                'code': code,
+                'phone_no': phone_no,
+                'msg': 'Буруу дугаар байна.',
+            })
+
+        return JsonResponse({
+            'valid': True,
+            'code': code,
+            'phone_no': phone_no,
+            'msg': 'Ok',
+        })
+
+
+@csrf_exempt
 def validate_code(request):
     if request.method == 'POST':
         code = request.POST.get('code')
@@ -20,6 +57,8 @@ def validate_code(request):
         except Lottery.DoesNotExist:
             return JsonResponse({'valid': False})
 
+
+@csrf_exempt
 def validate_phone_no(request):
     if request.method == 'POST':
         phone_no = request.POST.get('phone_no')
@@ -32,11 +71,13 @@ def validate_phone_no(request):
             return JsonResponse({'valid': False})
 
 
+@csrf_exempt
 def list(request):
     lottery_list = LotteryResult.objects.all()
     return render(request, 'list.html', {"lottery_list":lottery_list})
 
 
+@csrf_exempt
 def get_wheel_items(request):
     items = Wheel.objects.filter(is_active=True).order_by('pk')
     data = []
@@ -56,6 +97,8 @@ def get_wheel_items(request):
     
     return JsonResponse({'wheel_items': data})
 
+
+@csrf_exempt
 def save_result(request):
     if request.method == 'POST':
         phone_no = request.POST.get('phone_no')
