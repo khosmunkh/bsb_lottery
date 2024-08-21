@@ -105,23 +105,25 @@ def save_result(request):
         code = request.POST.get('code').upper()
         lottery = Lottery.objects.filter(code=code, is_active = True).first()
         wheel_item = get_object_or_404(Wheel, id=item_id)
-
+        now = datetime.datetime.now()
         if not lottery:
             return JsonResponse({
                 'success': False,
                 'msg': 'Ашиглагдсан код байна',
             })
-
-        test = LotteryResult.objects.create(
-            lottery=lottery,
-            item=wheel_item,
-            phone_no=phone_no
-        )
+        
         test_codes = ['TST11000', 'TST12000', 'TST13000', 'TST14000', 'TST15000', 'TST16000', 'TST17000' ,'TST18000' ,'TST19000']
 
         if code not in test_codes:
+            test = LotteryResult.objects.create(
+                lottery=lottery,
+                item=wheel_item,
+                phone_no=phone_no,
+                created_at=now
+            )
             lottery.is_active = False
             lottery.save()
             wheel_item.quantity -= 1
             wheel_item.save()
-        return JsonResponse({'success': True, 'title':wheel_item.title,'is_active':wheel_item.is_active, 'created_date': datetime.datetime.strftime( test.created_at, '%Y-%m-%d %H:%M:%S %p')})   
+            
+        return JsonResponse({'success': True, 'title':wheel_item.title,'is_active':wheel_item.is_active, 'created_date': datetime.datetime.strftime(now, '%Y-%m-%d %H:%M:%S %p')})   

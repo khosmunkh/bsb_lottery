@@ -130,16 +130,22 @@
     function validateBoth() {
         var code = document.getElementById("code").value;
         var phone_no = document.getElementById("phone_no").value;
-        if(!phone_no && !code){
+        if(!phone_no || !code){
             showToast("Хэрэгтэй мэдээллүүдээ бөглөнө үү", false);
             return;
         }
-        if (!code) {
-            showToast("Сугалааны код хоосон байж болохгүй", false);
-            return;
+        if (phone_no && phone_no.length == 8) {
+            if (phone_no && phone_no.length === 8) {
+                if (['6', '7', '8', '9'].some(digit => phone_no.startsWith(digit))) {
+                    console.log("Phone number is valid and starts with a valid digit.");
+                } else {
+                    showToast("Таны утасны дугаар бодит дугаар биш байна", false);
+                    return;
+                }
+            } 
         }
-        if (!phone_no) {
-            showToast("Утасны дугаар заавал бөглөнө үү", false);
+        else{
+            showToast("Таны утасны дугаар 8 оронтой байх ёстой", false);
             return;
         }
         blockPage();

@@ -42,7 +42,7 @@ class LotteryResult(models.Model):
     lottery = models.ForeignKey(Lottery, on_delete=models.DO_NOTHING)
     item = models.ForeignKey(Wheel, on_delete=models.DO_NOTHING)
     phone_no = models.CharField(max_length=100, verbose_name='Худалдан авагчийн регистрийн дугаар')
-    created_at = models.DateTimeField(auto_now=True, verbose_name='Үүссэн огноо')
+    created_at = models.DateTimeField(verbose_name='Үүссэн огноо')
     updated_at = models.DateTimeField(auto_now=True, verbose_name='Шинэчилсэн/Зассан огноо')
 
     def __str__(self):
