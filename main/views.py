@@ -38,7 +38,7 @@ def list(request):
 
 
 def get_wheel_items(request):
-    items = Wheel.objects.filter(is_active=True)
+    items = Wheel.objects.filter(is_active=True).order_by('pk')
     data = []
     for item in items:
         if item.quantity > 0:

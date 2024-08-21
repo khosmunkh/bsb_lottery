@@ -13,6 +13,7 @@ services:
   web:
     volumes:
       - static:/static
+      - media:/app/main.wheel
     env_file:
       - .env
     build:
@@ -22,3 +23,4 @@ services:
 
 volumes:
   static:
+  media:
