@@ -66,7 +66,7 @@ def save_result(request):
         test = LotteryResult.objects.create(
             lottery=lottery,
             item=wheel_item,
-            register_no=phone_no
+            phone_no=phone_no
         )
 
         test_codes = ['TST11000', 'TST12000', 'TST13000', 'TST14000', 'TST15000', 'TST16000', 'TST17000' ,'TST18000' ,'TST19000']
