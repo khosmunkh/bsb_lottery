@@ -13,3 +13,4 @@ django-cors-headers
 pandas
 openpyxl
 Pillow
+django-3-jet
