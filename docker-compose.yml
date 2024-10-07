@@ -10,10 +10,11 @@ services:
       - TZ=Asia/Ulaanbaatar
     ports:
       - "6013:5432"
+
   web:
     volumes:
-      - static:/static
-      - media:/app/main.wheel
+      - static:/app/static
+      - media:/app/media
     env_file:
       - .env
     build:

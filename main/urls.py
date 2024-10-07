@@ -13,4 +13,8 @@ urlpatterns = [
     path('validate_both/', views.validate_both, name='validate_both'),
     path('get_wheel_items/', views.get_wheel_items, name='get_wheel_items'),
     path('save_result/', views.save_result, name='save_result'),
-] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+]
+
+if settings.DEBUG:
+    urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

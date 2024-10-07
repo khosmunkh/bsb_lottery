@@ -25,15 +25,15 @@ SECRET_KEY = 'django-insecure-e63z^r)vxj88$9c20r$7&^_u=0-q-rizg#z5el*$vv+--%n+=w
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['103.153.141.250', 'it.bsb.mn', '127.0.0.1']
+ALLOWED_HOSTS = ['103.41.112.60', 'mebel.bsb.mn', '127.0.0.1']
 
-CSRF_TRUSTED_ORIGINS = ['https://it.bsb.mn', 'http://it.bsb.mn', 'http://103.153.141.250', 'http://127.0.0.1']
+CSRF_TRUSTED_ORIGINS = ['https://mebel.bsb.mn', 'http://mebel.bsb.mn', 'http://103.41.112.60', 'http://127.0.0.1']
 
 CORS_ALLOW_ALL_ORIGINS = False
 CORS_ALLOWED_ORIGINS = [
-    "https://it.bsb.mn",
-    "http://it.bsb.mn",
-    "http://103.153.141.250",
+    "https://mebel.bsb.mn",
+    "http://mebel.bsb.mn",
+    "http://103.41.112.60",
     "http://127.0.0.1",
 ]
 
@@ -140,11 +140,12 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 STATICFILES_DIRS = [
-    BASE_DIR / "static",
+    os.path.join(BASE_DIR, 'staticfiles'),
 ]
+STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 
 MEDIA_URL = '/media/'
-MEDIA_ROOT = os.path.join(BASE_DIR, 'main.wheel')
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.0/ref/settings/#default-auto-field
 
