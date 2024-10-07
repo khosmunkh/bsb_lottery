@@ -143,12 +143,9 @@ STATIC_URL = '/static/'
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, 'staticfiles'),
 ]
-<<<<<<< HEAD
 STATIC_ROOT = os.path.join(BASE_DIR, 'static')
-=======
 LOGIN_REDIRECT_URL = '/'
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
->>>>>>> 00f30418ce8de9eb39f22ee046e66a6c751e7c11
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
