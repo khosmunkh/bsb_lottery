@@ -13,4 +13,3 @@ django-cors-headers
 pandas
 openpyxl
 Pillow
-django-admin-star
