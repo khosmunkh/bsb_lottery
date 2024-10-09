@@ -22,12 +22,12 @@
     }
 
     body {
-        background-image: url("{% static 'images/bg-2.png' %}") !important;
+        background-image: url("{% static 'images/bg-2b.jpg' %}") !important;
     }
 
     #pointer {
         position: absolute;
-        top: 5vh;
+        top: 8vh;
         left: 50%;
         margin-left: -15px;
         width: 0;
@@ -142,11 +142,11 @@
     .winning-text{
         color:#54077e;
         font-size: 2em;
+        font-weight: 1000;
         margin: 0;
     }
     .winning-subtext{
         color:#54077e;
-        font-family: 'Manrope Light';
         font-size: 1.5em;
     }
     .modal-header{
@@ -192,7 +192,8 @@
 </div>
 <div class="row">
     <div id="input-container">
-        <canvas id="canvas" width="800" height="800"></canvas>
+            <div id="pointer"></div>
+            <canvas id="canvas" width="800" height="800"></canvas>
         <img id="spin-button" width="20%" src="{% static 'images/erguuleh.png' %}" class="button-effect">
     </div>
 </div>
@@ -200,7 +201,7 @@
 {% block scripts %}
 <script>
     document.addEventListener('DOMContentLoaded', function loadWheel() {
-        fetch("{% url 'get_wheel_items' %}")
+        fetch("{% url 'get_wheel_items' 2 %}")
             .then(response => response.json())
             .then(data => {
                 if (data.wheel_items.length > 0) {
@@ -278,21 +279,6 @@
 
     var wheelData = [];
 
-    function loadWheel() {
-        fetch("{% url 'get_wheel_items' %}")
-            .then(response => response.json())
-            .then(data => {
-                if (data.wheel_items.length > 0) {
-                    wheelData = data.wheel_items;
-                    document.getElementById("canvas").style.display = "block";
-                    renderWheel();
-                } else {
-                    document.getElementById("question").style.display = "block";
-                    document.querySelector("#question h1").innerText = "Бонус бэлэг бараа дууссан байна.";
-                }
-            });
-    }
-
     function renderWheel() {
         const segments = wheelData.map(item => ({
             label: item.title,
@@ -302,11 +288,16 @@
         }));
 
         const totalChances = segments.reduce((sum, segment) => sum + segment.chance, 0);
-
+        const ctx = canvas.getContext("2d");
+        const gradient = ctx.createLinearGradient(0, 0, 170, 0);
+        gradient.addColorStop("0", "magenta");
+        gradient.addColorStop("0.5", "blue");
+        gradient.addColorStop("1.0", "red");
         let myWheel = new Winwheel({
             'numSegments': segments.length,
             'outerRadius': 400,
-            'textFontSize': 14,
+            'textFontSize': 20,
+            'strokeStyle':'white',
             'textFontFamily': 'Manrope Regular',
             'segments': segments.map(segment => ({
                 'fillStyle': segment.fillStyle,

@@ -6,5 +6,4 @@ from main.models import Wheel
 # Register your models here.
 
 admin.site.register(Lottery)
-admin.site.register(LotteryResult)
 admin.site.register(Wheel)

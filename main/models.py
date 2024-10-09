@@ -2,6 +2,12 @@ from django.db import models
 
 # Create your models here.
 
+BRANCH_CHOICES = [
+    (0,'--------'),
+    (1,'Гэрийн мебель'),
+    (2,'Оффис мебель'),
+    (3,'Орон нутаг'),
+]
 
 from datetime import datetime
 class Wheel(models.Model):
@@ -10,10 +16,11 @@ class Wheel(models.Model):
     wheel_text_color =  models.CharField(max_length=20, default='#000000', verbose_name="Хүрдний хэрчмийн текст өнгө")
     title = models.CharField(max_length=100, verbose_name="Барааны нэр")
     chance = models.FloatField(default=1.0, help_text="Зөвхөн тоо хийх | % бичиж болохгүй", verbose_name="Таарах магадлал")
-    is_active = models.BooleanField(default=True, verbose_name="Шагналгүй хүрд эсэх")
+    is_prize = models.BooleanField(default=True, verbose_name="Шагналтай хүрд эсэх")
     quantity = models.IntegerField(default=0, verbose_name="Үлдэгдэл")
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+    branch = models.IntegerField(choices=BRANCH_CHOICES, default=0)
 
     def __str__(self):
         return self.title + " ===> " + str(self.quantity) + " ш"

@@ -1,6 +1,6 @@
 {% extends 'base.html' %}
 {% load static %}
-{% block title %}Бэлд Суралц Бүтээ{% endblock title %}
+{% block title %}{% endblock title %}
 {% block style %}
 <style>
     @font-face {
@@ -99,7 +99,7 @@
     <div id="input-container">
         <div id="validation" class="text-center my-4">
             <input type="text" id="code" class="form-control styled-input mb-2" required="true" autocomplete="off"
-                   placeholder="Сугалааны дугаараа оруулна уу."  maxlength="8" />
+                   placeholder="Сугалааны дугаараа оруулна уу."  maxlength="11" />
         </div>
         <div id="register-form" class="text-center my-4">
             <input type="number" id="phone_no" class="form-control styled-input mb-2" required="true" maxlength=8 autocomplete="off"
@@ -166,7 +166,17 @@
             unBlockPage();
             if (data.valid) {
                 showToast(data.msg, true);
-                window.location.href = "{% url 'wheel' %}?phone_no=" + encodeURIComponent(data.phone_no) + "&code=" + encodeURIComponent(data.code);
+                let redirectUrl = "";
+                if (data.branch === 1) {
+                    redirectUrl = "{% url 'hf' %}?phone_no=" + encodeURIComponent(data.phone_no) + "&code=" + encodeURIComponent(data.code);
+                } else if (data.branch === 2) {
+                    redirectUrl = "{% url 'of' %}?phone_no=" + encodeURIComponent(data.phone_no) + "&code=" + encodeURIComponent(data.code);
+                } else if (data.branch === 3) {
+                    redirectUrl = "{% url 'ons' %}?phone_no=" + encodeURIComponent(data.phone_no) + "&code=" + encodeURIComponent(data.code);
+                }
+                if (redirectUrl) {
+                    window.location.href = redirectUrl;
+                }
             } else {
                 showToast(data.msg, false);
             }

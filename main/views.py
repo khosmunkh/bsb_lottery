@@ -11,8 +11,16 @@ def index(request):
 
 
 @csrf_exempt
-def wheel(request):
-    return render(request, 'wheel.html')
+def country_wheel(request):
+    return render(request, 'countryside_mebel_wheel.html')
+
+@csrf_exempt
+def geriin_wheel(request):
+    return render(request, 'geriin_mebel_wheel.html')
+
+@csrf_exempt
+def office_wheel(request):
+    return render(request, 'office_mebel_wheel.html')
 
 
 @csrf_exempt
@@ -20,7 +28,21 @@ def validate_both(request):
     if request.method == 'POST':
         code = request.POST.get('code')
         phone_no = request.POST.get('phone_no')
+        
+        branch_1_prefixes = ['HOMMOL', 'HOMSTY', 'HOMMIS', 'BSBINT','TST110', 'TST120', 'TST130','TST170']
+        branch_2_prefixes = ['MEBMOL', 'MEBOFM', 'MEBMIS', 'TST180', 'TST190', 'TST200']
+        branch_3_prefixes = ['HOMERD', 'HOMDAR', 'HOMUMG', 'TST140', 'TST150', 'TST160']
 
+        branch = None
+        code_prefix = code[:6]
+
+        if code_prefix in branch_1_prefixes:
+            branch = 1
+        elif code_prefix in branch_2_prefixes:
+            branch = 2
+        elif code_prefix in branch_3_prefixes:
+            branch = 3
+            
         lottery = Lottery.objects.filter(code=code, is_active = True)
         if not lottery:
             return JsonResponse({
@@ -42,6 +64,7 @@ def validate_both(request):
             'valid': True,
             'code': code,
             'phone_no': phone_no,
+            'branch': branch,
             'msg': 'Ok',
         })
 
@@ -77,8 +100,9 @@ def list(request):
 
 
 @csrf_exempt
-def get_wheel_items(request):
-    items = Wheel.objects.all().order_by('pk')
+def get_wheel_items(request, id):
+    items = Wheel.objects.filter(branch = id ).order_by('pk')
+    
     data = []
     for item in items:
         if item.quantity > 0:
@@ -87,7 +111,7 @@ def get_wheel_items(request):
             calculated_chance = 0.0
         data.append({
             'id': item.id,
-            'title': item.title.upper(),
+            'title': item.title,
             'color': item.wheel_slice_color,
             'text_color': item.wheel_text_color,
             'chance': calculated_chance,
@@ -126,4 +150,4 @@ def save_result(request):
             wheel_item.quantity -= 1
             wheel_item.save()
             
-        return JsonResponse({'success': True, 'title':wheel_item.title,'is_active':wheel_item.is_active, 'created_date': datetime.datetime.strftime(now, '%Y-%m-%d %H:%M:%S %p')})   
+        return JsonResponse({'success': True, 'title':wheel_item.title,'is_active':wheel_item.is_prize, 'created_date': datetime.datetime.strftime(now, '%Y-%m-%d %H:%M:%S')})   

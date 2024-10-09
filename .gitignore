@@ -4,4 +4,5 @@ db.sqlite3
 .env
 /venv/
 bsb_lottery_venv/
+bsb_venv/
 /static/

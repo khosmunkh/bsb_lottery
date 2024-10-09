@@ -1,15 +1,16 @@
 from main.models import Lottery
 
 lottery_configs = [
-    {'code_mask': 'ITC11{:03d}', 'code_range': 260, 'description': "Мега"},
-    {'code_mask': 'ITC12{:03d}', 'code_range': 250, 'description': "Молл"},
-    {'code_mask': 'ITC13{:03d}', 'code_range': 180, 'description': "Мега-2"},
-    {'code_mask': 'ITC14{:03d}', 'code_range': 60, 'description': "100 айл"},
-    {'code_mask': 'ITC15{:03d}', 'code_range': 60, 'description': "Дархан"},
-    {'code_mask': 'ITC16{:03d}', 'code_range': 40, 'description': "Эрдэнэт"},
-    {'code_mask': 'ITC17{:03d}', 'code_range': 25, 'description': "Өмнөговь"},
-    {'code_mask': 'ITC18{:03d}', 'code_range': 25, 'description': "Интернет"},
-    {'code_mask': 'ITC19{:03d}', 'code_range': 20, 'description': "Гэрээт"}
+    {'code_mask': 'HOMMOL11{:03d}', 'code_range': 150, 'description': ""},
+    {'code_mask': 'HOMSTY12{:03d}', 'code_range': 120, 'description': ""},
+    {'code_mask': 'HOMMIS13{:03d}', 'code_range': 100, 'description': ""},
+    {'code_mask': 'BSBINT17{:03d}', 'code_range': 60, 'description': ""},
+    {'code_mask': 'MEBMOL18{:03d}', 'code_range': 60, 'description': ""},
+    {'code_mask': 'MEBOFM19{:03d}', 'code_range': 60, 'description': ""},
+    {'code_mask': 'MEBMIS20{:03d}', 'code_range': 60, 'description': ""},
+    {'code_mask': 'HOMERD14{:03d}', 'code_range': 60, 'description': ""},
+    {'code_mask': 'HOMDAR15{:03d}', 'code_range': 60, 'description': ""},
+    {'code_mask': 'HOMDAR16{:03d}', 'code_range': 60, 'description': ""},
 ]
 
 for config in lottery_configs:
