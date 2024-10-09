@@ -3,4 +3,5 @@ main.wheel/wheel/
 db.sqlite3
 .env
 /venv/
+bsb_lottery_venv/
 /static/
