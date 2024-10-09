@@ -2,6 +2,7 @@ from django.shortcuts import render, get_object_or_404
 from django.http import JsonResponse
 from .models import Wheel, Lottery, LotteryResult
 from django.views.decorators.csrf import csrf_exempt
+from django.http import HttpResponseBadRequest
 
 import datetime
 
@@ -9,17 +10,32 @@ import datetime
 def index(request):
     return render(request, 'index.html')
 
-
 @csrf_exempt
 def country_wheel(request):
+    phone_no = request.GET.get('phone_no')
+    code = request.GET.get('code')
+
+    if not phone_no or not code:
+        return HttpResponseBadRequest("Хориотой хандалт")
     return render(request, 'countryside_mebel_wheel.html')
 
 @csrf_exempt
 def geriin_wheel(request):
+    phone_no = request.GET.get('phone_no')
+    code = request.GET.get('code')
+
+    if not phone_no or not code:
+        return HttpResponseBadRequest("Хориотой хандалт")
     return render(request, 'geriin_mebel_wheel.html')
 
 @csrf_exempt
 def office_wheel(request):
+    phone_no = request.GET.get('phone_no')
+    code = request.GET.get('code')
+
+    if not phone_no or not code:
+        return HttpResponseBadRequest("Хориотой хандалт")
+
     return render(request, 'office_mebel_wheel.html')
 
 
