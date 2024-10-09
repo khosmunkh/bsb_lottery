@@ -15,7 +15,7 @@ class Wheel(models.Model):
     wheel_slice_color =  models.CharField(max_length=20, default='#ffffff', verbose_name="Хүрдний хэрчмийн өнгө")
     wheel_text_color =  models.CharField(max_length=20, default='#000000', verbose_name="Хүрдний хэрчмийн текст өнгө")
     title = models.CharField(max_length=100, verbose_name="Барааны нэр")
-    chance = models.FloatField(default=1.0, help_text="Зөвхөн тоо хийх | % бичиж болохгүй", verbose_name="Таарах магадлал")
+    chance = models.FloatField(default=1.0, help_text="Зөвхөн тоон утга хийх | % тэмдэг бичиж болохгүй", verbose_name="Таарах магадлал")
     is_prize = models.BooleanField(default=True, verbose_name="Шагналтай хүрд эсэх")
     quantity = models.IntegerField(default=0, verbose_name="Үлдэгдэл")
     created_at = models.DateTimeField(auto_now_add=True)
@@ -26,8 +26,8 @@ class Wheel(models.Model):
         return self.title + " ===> " + str(self.quantity) + " ш"
 
     class Meta:
-        verbose_name = 'Хүрд'
-        verbose_name_plural = 'Хүрд'
+        verbose_name = 'Хүрдний хэрчим'
+        verbose_name_plural = 'Хүрдний хэрчим'
 
 
 class Lottery(models.Model):
@@ -41,14 +41,14 @@ class Lottery(models.Model):
         return self.code
     
     class Meta:
-        verbose_name = 'Сугалаа'
-        verbose_name_plural = 'Сугалаа'
+        verbose_name = 'Код'
+        verbose_name_plural = 'Код'
 
 
 class LotteryResult(models.Model):
     lottery = models.ForeignKey(Lottery, on_delete=models.DO_NOTHING)
     item = models.ForeignKey(Wheel, on_delete=models.DO_NOTHING)
-    phone_no = models.CharField(max_length=100, verbose_name='Худалдан авагчийн регистрийн дугаар')
+    phone_no = models.CharField(max_length=100, verbose_name='Худалдан авагчийн утасны дугаар')
     created_at = models.DateTimeField(verbose_name='Үүссэн огноо')
     updated_at = models.DateTimeField(auto_now=True, verbose_name='Шинэчилсэн/Зассан огноо')
 
