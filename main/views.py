@@ -152,7 +152,7 @@ def save_result(request):
                 'msg': 'Ашиглагдсан код байна',
             })
         
-        test_codes = ['TST11000', 'TST12000', 'TST13000', 'TST14000', 'TST15000', 'TST16000', 'TST17000' ,'TST18000' ,'TST19000']
+        test_codes = ['TST11000', 'TST12000', 'TST13000', 'TST14000', 'TST15000', 'TST16000', 'TST17000' ,'TST18000' ,'TST19000','TST20000']
 
         if code not in test_codes:
             test = LotteryResult.objects.create(
