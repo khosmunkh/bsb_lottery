@@ -4,8 +4,14 @@
 {% block style %}
 <style>
     @font-face {
-        font-family: 'GEEKS Rupster';
-        src: url("{% static 'fonts/GEEKS Rupster Script Free (Regular).ttf' %}") format('truetype');
+        font-family: 'Manrope Regular';
+        src: url("{% static 'Manrope-VariableFont_wght.ttf' %}") format('truetype');
+        font-weight: normal;
+        font-style: normal;
+    }
+    @font-face {
+        font-family: 'Manrope Light';
+        src: url("{% static 'Manrope-Light.ttf' %}") format('truetype');
         font-weight: normal;
         font-style: normal;
     }
@@ -133,6 +139,19 @@
         max-width: 100%;
         margin: 0 auto;
     }
+    .winning-text{
+        color:#54077e;
+        font-size: 2em;
+        margin: 0;
+    }
+    .winning-subtext{
+        color:#54077e;
+        font-family: 'Manrope Light';
+        font-size: 1.5em;
+    }
+    .modal-header{
+        border-bottom: 3px solid #54077e;
+    }
 </style>
 {% endblock style %}
 {% block content %}
@@ -146,9 +165,12 @@
             <div class="modal-body text-center">
                 <p id="winningDetails"></p>
                 <img id="modalResultImage" src="{% static 'images/suralts.png' %}" alt="" width="50%" />
-                <p><strong>Утасны дугаар:</strong> <span id="modalPhoneNum"></span></p>
-                <p><strong>Хожсон бараа:</strong> <span id="modalItemName"></span></p>
-                <p><strong>Огноо:</strong> <span id="modalDate"></span></p>
+                <p class="winning-text"><span>Утасны дугаар:</span> </p>
+                <span class="winning-subtext" id="modalPhoneNum"></span>
+                <p class="winning-text"><span>Хожсон бараа:</span> </p>
+                <span class="winning-subtext" id="modalItemName"></span>
+                <p class="winning-text"><span>Огноо:</span> </p>
+                <span class="winning-subtext" id="modalDate"></span>
             </div>
             <div class="modal-footer">
                 <img src="{% static 'images/hewleh.png' %}" onclick="printModal()" class="button-effect">
@@ -162,7 +184,7 @@
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content custom-modal-content">
             <div class="modal-body text-center">
-                <img id="modalResultImageThanks" src="{% static 'images/tand_bayrlalaa.png' %}" alt="" />
+                <img id="modalResultImageThanks" src="{% static 'images/tand_bayrlalaa.png' %}" class="pb-3" alt="" />
                 <img src="{% static 'images/dahin_ehleh.png' %}" onclick="window.location.href = '/';" class="button-image button-effect">
             </div>
         </div>
@@ -285,6 +307,7 @@
             'numSegments': segments.length,
             'outerRadius': 400,
             'textFontSize': 14,
+            'textFontFamily': 'Manrope Regular',
             'segments': segments.map(segment => ({
                 'fillStyle': segment.fillStyle,
                 'text': segment.label,

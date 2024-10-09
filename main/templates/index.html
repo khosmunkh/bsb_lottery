@@ -4,8 +4,8 @@
 {% block style %}
 <style>
     @font-face {
-        font-family: 'GEEKS Rupster';
-        src: url("{% static 'fonts/GEEKS Rupster Script Free (Regular).ttf' %}") format('truetype');
+        font-family: 'Manrope Regular';
+        src: url("{% static 'fonts/Manrope-Light.ttf' %}") format('truetype');
         font-weight: normal;
         font-style: normal;
     }
@@ -62,7 +62,7 @@
 
     .styled-input::placeholder {
         color: #888;
-        font-family: 'GEEKS Rupster', serif;
+        font-family: 'Manrope Regular', serif;
         font-size: 1.8em;
         text-align: center;
     }
@@ -105,7 +105,7 @@
             <input type="number" id="phone_no" class="form-control styled-input mb-2" required="true" maxlength=8 autocomplete="off"
                    placeholder="Утасны дугаараа оруулна уу" oninput="this.value = this.value.slice(0, 8);" />
         </div>
-        <img src="{% static 'images/oruulah.png' %}" onclick="validateBoth()" alt="" class="button-effect">
+        <img src="{% static 'images/oruulah.png' %}" onclick="validateBoth()" width="25%" alt="" class="button-effect">
     </div>
 </div>
 {% endblock content %}

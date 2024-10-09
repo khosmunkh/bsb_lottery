@@ -17,14 +17,21 @@
     {% block style %}
     {% endblock style %}
     <style>
+    @font-face {
+        font-family: 'Manrope Regular';
+        src: url("{% static 'fonts/Manrope-Bold.ttf' %}") format('truetype');
+        font-weight: normal;
+        font-style: normal;
+    }
     body {
-        background-image: url("{% static 'images/bg-1.png' %}");
+        background-image: url("{% static 'images/bg-1.jpg' %}");
         background-repeat: no-repeat;
         background-size: cover;
         background-attachment: fixed;
         height: 100vh;
         margin: 0;
         padding: 0;
+        font-family: 'Manrope Regular', serif;
         overflow: hidden;
     }
     h3 {
