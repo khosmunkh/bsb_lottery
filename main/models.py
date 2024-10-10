@@ -23,7 +23,7 @@ class Wheel(models.Model):
     branch = models.IntegerField(choices=BRANCH_CHOICES, default=0)
 
     def __str__(self):
-        return self.title + " ===> " + str(self.quantity) + " ш"
+        return self.title + " " + str(self.quantity) + " ш ~ " + self.get_branch_display()
 
     class Meta:
         verbose_name = 'Хүрдний хэрчим'
