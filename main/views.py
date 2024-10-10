@@ -131,7 +131,6 @@ def get_wheel_items(request, id):
             'color': item.wheel_slice_color,
             'text_color': item.wheel_text_color,
             'chance': calculated_chance,
-            'image_url': item.image.url
         })
     
     return JsonResponse({'wheel_items': data})

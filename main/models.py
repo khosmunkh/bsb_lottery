@@ -11,7 +11,6 @@ BRANCH_CHOICES = [
 
 from datetime import datetime
 class Wheel(models.Model):
-    image = models.ImageField(upload_to='wheel/', verbose_name="Барааны зураг")
     wheel_slice_color =  models.CharField(max_length=20, default='#ffffff', verbose_name="Хүрдний хэрчмийн өнгө")
     wheel_text_color =  models.CharField(max_length=20, default='#000000', verbose_name="Хүрдний хэрчмийн текст өнгө")
     title = models.CharField(max_length=100, verbose_name="Барааны нэр")
