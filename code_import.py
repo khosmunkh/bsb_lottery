@@ -10,7 +10,7 @@ lottery_configs = [
     {'code_mask': 'MEBMIS20{:03d}', 'code_range': 60, 'description': ""},
     {'code_mask': 'HOMERD14{:03d}', 'code_range': 60, 'description': ""},
     {'code_mask': 'HOMDAR15{:03d}', 'code_range': 60, 'description': ""},
-    {'code_mask': 'HOMDAR16{:03d}', 'code_range': 60, 'description': ""},
+    {'code_mask': 'HOMUMG16{:03d}', 'code_range': 60, 'description': ""},
 ]
 
 for config in lottery_configs:
